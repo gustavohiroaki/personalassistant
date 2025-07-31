@@ -1,5 +1,5 @@
 import { ITask } from "@/entities/ITask";
-import { getAll, post } from "../repositories/task";
+import { get, post } from "../_repositories/task";
 
 export async function POST(req: Request) {
     const body = await req.json() as ITask;
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const task: ITask = {
         title: body.title,
         description: body.description,
-        dueDate: new Date(body.dueDate),
+        dueDate: body.dueDate,
         priority: body.priority as 'low' | 'medium' | 'high',
         completed: body.completed || false
     };
@@ -24,9 +24,10 @@ export async function POST(req: Request) {
         return new Response("Internal Server Error", { status: 500 });
     }
 }
+
 export async function GET() {
     try {
-        const tasks = await getAll();
+        const tasks = await get();
         return new Response(JSON.stringify(tasks), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (error) {
         console.error("Error fetching tasks:", error);
