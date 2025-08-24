@@ -1,0 +1,37 @@
+'use server'
+
+import { ITask } from "@/entities/ITask";
+
+export async function edit(formData: FormData, id: string) {
+    const title = formData.get("title")?.toString();
+    const description = formData.get("description")?.toString();
+    const dueDate = formData.get("dueDate")?.toString();
+    const priority = formData.get("priority")?.toString();
+
+    const body: ITask = {
+        title: title || "",
+        description: description || "",
+        dueDate: new Date(dueDate || ""),
+        priority: priority as 'low' | 'medium' | 'high',
+        completed: false
+    };
+
+    await fetch(`http://localhost:3000/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+}
+
+export async function getTask(id: string) {
+    const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+        method: "GET"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch task");
+    }
+
+    return response.json();
+}

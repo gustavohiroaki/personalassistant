@@ -1,8 +1,8 @@
-import { db } from "./database"
+import db from "@/backend/database";
 
 export const migrate = () => {
-    db.serialize(() => {
-        db.run(`
+    db().instance.serialize(() => {
+        db().instance.run(`
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,

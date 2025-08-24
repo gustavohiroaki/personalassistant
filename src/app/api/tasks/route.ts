@@ -1,5 +1,5 @@
-import { ITask } from "@/entities/ITask";
-import { get, post } from "../_repositories/task";
+import repositories from "@/backend/repositories";
+import { ITask, ITaskCreate } from "@/entities/ITask";
 
 export async function POST(req: Request) {
     const body = await req.json() as ITask;
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
         return new Response("Missing required fields", { status: 400 });
     }
 
-    const task: ITask = {
+    const task: ITaskCreate = {
         title: body.title,
         description: body.description,
         dueDate: body.dueDate,
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     };
 
     try {
-        await post(task);
+        await repositories.task.create(task);
         return new Response("Task created successfully", { status: 201 });
     } catch (error) {
         console.error("Error creating task:", error);
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
     try {
-        const tasks = await get();
+        const tasks = await repositories.task.find({});
         return new Response(JSON.stringify(tasks), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (error) {
         console.error("Error fetching tasks:", error);

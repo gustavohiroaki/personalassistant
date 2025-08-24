@@ -28,6 +28,36 @@ body {
   margin: 0;
 }
 
+/* Loading Animation */
+.loader-bars {
+  --loader-color: #ffffff;
+  background: 
+    no-repeat linear-gradient(var(--loader-color) 0 0),
+    no-repeat linear-gradient(var(--loader-color) 0 0),
+    no-repeat linear-gradient(var(--loader-color) 0 0);
+  animation: 
+    loader-size 1s infinite,
+    loader-position 1s infinite;
+}
+
+@keyframes loader-size {
+  0%, 100% { 
+    background-size: 20% 100%, 20% 100%, 20% 100%;
+  }
+  33%, 66% { 
+    background-size: 20% 40%, 20% 40%, 20% 40%;
+  }
+}
+
+@keyframes loader-position {
+  0%, 33% {
+    background-position: 0% 0%, 50% 100%, 100% 100%;
+  }
+  66%, 100% {
+    background-position: 100% 0%, 0% 100%, 50% 100%;
+  }
+}
+
 .scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--foreground) transparent;
