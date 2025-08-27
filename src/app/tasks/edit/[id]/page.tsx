@@ -7,7 +7,7 @@ import Input from "@/components/atoms/forms/Input";
 import TextArea from "@/components/atoms/forms/TextArea";
 import Select from "@/components/atoms/forms/Select";
 import InputGroup from "@/components/atoms/forms/InputGroup";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/buttons/Button";
 
 export default async function EditTask({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

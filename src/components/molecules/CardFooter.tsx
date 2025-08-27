@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import Button from "../atoms/Button";
+import Button from "../atoms/buttons/Button";
 import Checkbox from "../atoms/Checkbox";
 
 interface CardFooterProps {

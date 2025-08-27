@@ -1,7 +1,7 @@
 'use client'
 
 import { ITask } from "@/entities/ITask";
-import CloseButton from "../atoms/CloseButton";
+import CloseButton from "../atoms/buttons/CloseButton";
 import CardFooter from "../molecules/CardFooter";
 import Card from "../organisms/Card";
 import CenteredContainer from "../organisms/CenteredContainer";

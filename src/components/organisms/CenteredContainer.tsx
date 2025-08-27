@@ -8,17 +8,18 @@ interface CenteredContainerProps {
 
 export default function CenteredContainer({ children, justify = 'center' }: CenteredContainerProps) {
     const classes = build([
-        'min-h-screen',
+        'w-full',
         'bg-gray-900',
         'flex',
         'flex-col',
         justifyClasses[justify],
         'items-center',
-        'py-10'
+        'py-10',
+        'px-4'
     ])
 
     return (
-        <div className={classes}>
+        <div className={classes} style={{ height: 'calc(100vh - var(--header-height))' }}>
             {children}
         </div >
     );

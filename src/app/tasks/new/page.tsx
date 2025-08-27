@@ -6,7 +6,7 @@ import InputGroup from "@/components/atoms/forms/InputGroup";
 import Input from "@/components/atoms/forms/Input";
 import TextArea from "@/components/atoms/forms/TextArea";
 import Select from "@/components/atoms/forms/Select";
-import Button from "@/components/atoms/Button";
+import Button from "@/components/atoms/buttons/Button";
 
 export default function NewTask() {
     return (
