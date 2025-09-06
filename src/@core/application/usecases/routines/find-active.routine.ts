@@ -4,7 +4,7 @@ import { IUseCase } from "@/@core/interfaces/usecases.interface";
 
 class FindActiveRoutinesUseCase implements IUseCase<null, IRoutineOutput[]> {
   private routineRepository: RoutineSqliteRepository;
-  
+
   constructor() {
     this.routineRepository = new RoutineSqliteRepository();
   }
@@ -12,8 +12,8 @@ class FindActiveRoutinesUseCase implements IUseCase<null, IRoutineOutput[]> {
   async execute(): Promise<IRoutineOutput[]> {
     const routines = await this.routineRepository.findActiveRoutines();
     return routines
-      .filter(routine => routine.isActive()) // Aplica validação de negócio
-      .map(routine => routine.toJSON());
+      .filter((routine) => routine.isActive()) // Aplica validação de negócio
+      .map((routine) => routine.toJSON());
   }
 }
 

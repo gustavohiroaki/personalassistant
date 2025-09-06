@@ -5,13 +5,17 @@ import { IRoutineRepository } from "../routines.repository.interface";
 class RoutineSqliteRepository implements IRoutineRepository {
   async create(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
-    
+
     // Serializa arrays para JSON strings
     const dbData = {
       ...routineData,
       taskIds: JSON.stringify(routineData.taskIds),
-      daysOfWeek: routineData.daysOfWeek ? JSON.stringify(routineData.daysOfWeek) : null,
-      daysOfMonth: routineData.daysOfMonth ? JSON.stringify(routineData.daysOfMonth) : null,
+      daysOfWeek: routineData.daysOfWeek
+        ? JSON.stringify(routineData.daysOfWeek)
+        : null,
+      daysOfMonth: routineData.daysOfMonth
+        ? JSON.stringify(routineData.daysOfMonth)
+        : null,
     };
 
     await db("routines").insert(dbData);
@@ -33,13 +37,17 @@ class RoutineSqliteRepository implements IRoutineRepository {
 
   async update(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
-    
+
     // Serializa arrays para JSON strings
     const dbData = {
       ...routineData,
       taskIds: JSON.stringify(routineData.taskIds),
-      daysOfWeek: routineData.daysOfWeek ? JSON.stringify(routineData.daysOfWeek) : null,
-      daysOfMonth: routineData.daysOfMonth ? JSON.stringify(routineData.daysOfMonth) : null,
+      daysOfWeek: routineData.daysOfWeek
+        ? JSON.stringify(routineData.daysOfWeek)
+        : null,
+      daysOfMonth: routineData.daysOfMonth
+        ? JSON.stringify(routineData.daysOfMonth)
+        : null,
     };
 
     await db("routines").where({ id: entity.id }).update(dbData);
@@ -70,14 +78,24 @@ class RoutineSqliteRepository implements IRoutineRepository {
       updatedAt: dbRoutine.updatedAt as string | undefined,
       title: dbRoutine.title as string,
       description: dbRoutine.description as string | undefined,
-      frequency: dbRoutine.frequency as "once" | "daily" | "weekly" | "monthly" | "yearly" | "custom",
+      frequency: dbRoutine.frequency as
+        | "once"
+        | "daily"
+        | "weekly"
+        | "monthly"
+        | "yearly"
+        | "custom",
       startDate: dbRoutine.startDate as string,
       endDate: dbRoutine.endDate as string | undefined,
       active: Boolean(dbRoutine.active),
       taskIds: dbRoutine.taskIds ? JSON.parse(dbRoutine.taskIds as string) : [],
-      daysOfWeek: dbRoutine.daysOfWeek ? JSON.parse(dbRoutine.daysOfWeek as string) : undefined,
+      daysOfWeek: dbRoutine.daysOfWeek
+        ? JSON.parse(dbRoutine.daysOfWeek as string)
+        : undefined,
       dayOfMonth: dbRoutine.dayOfMonth as number | undefined,
-      daysOfMonth: dbRoutine.daysOfMonth ? JSON.parse(dbRoutine.daysOfMonth as string) : undefined,
+      daysOfMonth: dbRoutine.daysOfMonth
+        ? JSON.parse(dbRoutine.daysOfMonth as string)
+        : undefined,
       month: dbRoutine.month as number | undefined,
       dayOfYear: dbRoutine.dayOfYear as number | undefined,
       customRule: dbRoutine.customRule as string | undefined,

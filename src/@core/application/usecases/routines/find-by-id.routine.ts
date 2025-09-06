@@ -2,9 +2,11 @@ import { IRoutineOutput } from "@/@core/domain/entities/routine.entity";
 import { IRoutineRepository } from "@/@core/infrastructure/repositories/routines/routines.repository.interface";
 import { IUseCase } from "@/@core/interfaces/usecases.interface";
 
-class FindByIdRoutineUseCase implements IUseCase<string, IRoutineOutput | null> {
+class FindByIdRoutineUseCase
+  implements IUseCase<string, IRoutineOutput | null>
+{
   private routineRepository: IRoutineRepository;
-  
+
   constructor(routineRepository: IRoutineRepository) {
     this.routineRepository = routineRepository;
   }

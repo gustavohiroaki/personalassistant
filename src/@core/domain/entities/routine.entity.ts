@@ -1,7 +1,13 @@
 import { randomUUID } from "crypto";
 import { Entity } from "./entity";
 
-type TRoutineFrequency = "once" | "daily" | "weekly" | "monthly" | "yearly" | "custom";
+type TRoutineFrequency =
+  | "once"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "yearly"
+  | "custom";
 
 export interface IRoutineInput {
   title: string;
@@ -145,16 +151,19 @@ export class Routine extends Entity {
     this.updatedAt = new Date();
   }
 
-  setFrequency(frequency: TRoutineFrequency, options?: {
-    daysOfWeek?: number[];
-    dayOfMonth?: number;
-    daysOfMonth?: number[];
-    month?: number;
-    dayOfYear?: number;
-    customRule?: string;
-  }): void {
+  setFrequency(
+    frequency: TRoutineFrequency,
+    options?: {
+      daysOfWeek?: number[];
+      dayOfMonth?: number;
+      daysOfMonth?: number[];
+      month?: number;
+      dayOfYear?: number;
+      customRule?: string;
+    }
+  ): void {
     this.frequency = frequency;
-    
+
     // Limpa configurações anteriores
     this.daysOfWeek = undefined;
     this.dayOfMonth = undefined;
@@ -179,9 +188,11 @@ export class Routine extends Entity {
   // Validações de negócio
   isActive(): boolean {
     const now = new Date();
-    return this.active && 
-           now >= this.startDate && 
-           (!this.endDate || now <= this.endDate);
+    return (
+      this.active &&
+      now >= this.startDate &&
+      (!this.endDate || now <= this.endDate)
+    );
   }
 
   validateFrequencyConfiguration(): boolean {
@@ -192,9 +203,15 @@ export class Routine extends Entity {
       case "weekly":
         return this.daysOfWeek !== undefined && this.daysOfWeek.length > 0;
       case "monthly":
-        return this.dayOfMonth !== undefined || (this.daysOfMonth !== undefined && this.daysOfMonth.length > 0);
+        return (
+          this.dayOfMonth !== undefined ||
+          (this.daysOfMonth !== undefined && this.daysOfMonth.length > 0)
+        );
       case "yearly":
-        return this.dayOfYear !== undefined || (this.month !== undefined && this.dayOfMonth !== undefined);
+        return (
+          this.dayOfYear !== undefined ||
+          (this.month !== undefined && this.dayOfMonth !== undefined)
+        );
       case "custom":
         return this.customRule !== undefined && this.customRule.length > 0;
       default:

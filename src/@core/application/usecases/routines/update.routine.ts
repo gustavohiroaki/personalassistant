@@ -9,7 +9,7 @@ interface UpdateRoutineInput {
 
 class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
   private routineRepository: IRoutineRepository;
-  
+
   constructor(routineRepository: IRoutineRepository) {
     this.routineRepository = routineRepository;
   }
@@ -47,7 +47,7 @@ class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
     if (!updatedRoutine.validateFrequencyConfiguration()) {
       throw new Error("Invalid frequency configuration");
     }
-    
+
     return await this.routineRepository.update(updatedRoutine);
   }
 }

@@ -3,7 +3,7 @@ import { IUseCase } from "@/@core/interfaces/usecases.interface";
 
 class DeleteRoutineUseCase implements IUseCase<string, boolean> {
   private routineRepository: IRoutineRepository;
-  
+
   constructor(routineRepository: IRoutineRepository) {
     this.routineRepository = routineRepository;
   }

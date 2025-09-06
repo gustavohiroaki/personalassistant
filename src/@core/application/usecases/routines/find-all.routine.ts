@@ -4,7 +4,7 @@ import { IUseCase } from "@/@core/interfaces/usecases.interface";
 
 class FindAllRoutinesUseCase implements IUseCase<null, IRoutineOutput[]> {
   private routineRepository: IRoutineRepository;
-  
+
   constructor(routineRepository: IRoutineRepository) {
     this.routineRepository = routineRepository;
   }

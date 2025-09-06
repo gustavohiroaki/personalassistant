@@ -12,7 +12,13 @@ export async function POST(req: Request) {
   const routine = {
     title: body.title,
     description: body.description,
-    frequency: body.frequency as "once" | "daily" | "weekly" | "monthly" | "yearly" | "custom",
+    frequency: body.frequency as
+      | "once"
+      | "daily"
+      | "weekly"
+      | "monthly"
+      | "yearly"
+      | "custom",
     startDate: new Date(body.startDate),
     endDate: body.endDate ? new Date(body.endDate) : undefined,
     active: body.active ?? true,
@@ -30,7 +36,8 @@ export async function POST(req: Request) {
     return new Response("Routine created successfully", { status: 201 });
   } catch (error) {
     console.error("Error creating routine:", error);
-    const message = error instanceof Error ? error.message : "Internal Server Error";
+    const message =
+      error instanceof Error ? error.message : "Internal Server Error";
     return new Response(message, { status: 500 });
   }
 }

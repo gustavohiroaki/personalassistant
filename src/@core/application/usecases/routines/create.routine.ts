@@ -4,14 +4,14 @@ import { IUseCase } from "@/@core/interfaces/usecases.interface";
 
 class CreateRoutineUseCase implements IUseCase<IRoutineInput, boolean> {
   private routineRepository: IRoutineRepository;
-  
+
   constructor(routineRepository: IRoutineRepository) {
     this.routineRepository = routineRepository;
   }
 
   async execute(input: IRoutineInput): Promise<boolean> {
     const routine = new Routine(input);
-    
+
     // Validar configuração da frequência
     if (!routine.validateFrequencyConfiguration()) {
       throw new Error("Invalid frequency configuration");
