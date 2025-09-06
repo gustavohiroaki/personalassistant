@@ -6,7 +6,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
   async create(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
 
-    // Serializa arrays para JSON strings
     const dbData = {
       ...routineData,
       taskIds: JSON.stringify(routineData.taskIds),
@@ -38,7 +37,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
   async update(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
 
-    // Serializa arrays para JSON strings
     const dbData = {
       ...routineData,
       taskIds: JSON.stringify(routineData.taskIds),
@@ -59,7 +57,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
     return true;
   }
 
-  // Métodos específicos para rotinas
   async findActiveRoutines(): Promise<Routine[]> {
     const routines = await db("routines").where({ active: true }).select("*");
     return routines.map((routine) => this.mapFromDatabase(routine));
@@ -71,7 +68,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
   }
 
   private mapFromDatabase(dbRoutine: Record<string, unknown>): Routine {
-    // Deserializa JSON strings para arrays
     const routineData = {
       id: dbRoutine.id as string,
       createdAt: dbRoutine.createdAt as string,

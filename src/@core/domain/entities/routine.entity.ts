@@ -16,9 +16,8 @@ export interface IRoutineInput {
   startDate: Date;
   endDate?: Date;
   active?: boolean;
-  taskIds?: string[]; // IDs das tarefas associadas
-  // Configurações específicas por frequência
-  daysOfWeek?: number[]; // Para weekly: [0=Domingo, 1=Segunda, ...]
+  taskIds?: string[];
+  daysOfWeek?: number[];
   dayOfMonth?: number; // Para monthly: dia do mês (1-31)
   daysOfMonth?: number[]; // Para monthly múltiplos dias
   month?: number; // Para yearly: mês (1-12)
@@ -125,7 +124,6 @@ export class Routine extends Entity {
     return routine;
   }
 
-  // Métodos de negócio
   addTask(taskId: string): void {
     if (!this.taskIds.includes(taskId)) {
       this.taskIds.push(taskId);
@@ -164,7 +162,6 @@ export class Routine extends Entity {
   ): void {
     this.frequency = frequency;
 
-    // Limpa configurações anteriores
     this.daysOfWeek = undefined;
     this.dayOfMonth = undefined;
     this.daysOfMonth = undefined;
@@ -172,7 +169,6 @@ export class Routine extends Entity {
     this.dayOfYear = undefined;
     this.customRule = undefined;
 
-    // Define configurações específicas
     if (options) {
       this.daysOfWeek = options.daysOfWeek;
       this.dayOfMonth = options.dayOfMonth;
@@ -185,7 +181,6 @@ export class Routine extends Entity {
     this.updatedAt = new Date();
   }
 
-  // Validações de negócio
   isActive(): boolean {
     const now = new Date();
     return (

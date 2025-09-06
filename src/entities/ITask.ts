@@ -1,17 +1,25 @@
-// src/entities/ITask.ts
 export interface ITask {
-  id?: string; // opcional para criação
+  id?: string;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate: Date;
   priority: "low" | "medium" | "high";
   completed: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
 }
 
-// Para criação (sem id e createdAt)
-export type ITaskCreate = Omit<ITask, "id" | "createdAt | updatedAt">;
+export interface ITaskCreate {
+  title: string;
+  description: string;
+  dueDate: Date;
+  priority: "low" | "medium" | "high";
+  completed?: boolean;
+}
 
-// Para atualização (parcial)
-export type ITaskUpdate = Partial<Omit<ITask, "createdAt" | "updatedAt">>;
+export interface ITaskUpdate {
+  title?: string;
+  description?: string;
+  dueDate?: Date;
+  priority?: "low" | "medium" | "high";
+  completed?: boolean;
+}

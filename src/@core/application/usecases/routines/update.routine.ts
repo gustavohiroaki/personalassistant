@@ -15,13 +15,11 @@ class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
   }
 
   async execute({ id, data }: UpdateRoutineInput): Promise<boolean> {
-    // Busca a rotina existente
     const existingRoutine = await this.routineRepository.findById(id);
     if (!existingRoutine) {
       throw new Error("Routine not found");
     }
 
-    // Cria uma nova rotina com os dados atualizados
     const updatedRoutineData: IRoutineInput = {
       title: data.title ?? existingRoutine.title,
       description: data.description ?? existingRoutine.description,
@@ -39,11 +37,10 @@ class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
     };
 
     const updatedRoutine = new Routine(updatedRoutineData);
-    updatedRoutine.id = id; // Preserva o ID original
-    updatedRoutine.createdAt = existingRoutine.createdAt; // Preserva a data de criação
-    updatedRoutine.updatedAt = new Date(); // Define a data de atualização
+    updatedRoutine.id = id;
+    updatedRoutine.createdAt = existingRoutine.createdAt;
+    updatedRoutine.updatedAt = new Date();
 
-    // Validar configuração da frequência
     if (!updatedRoutine.validateFrequencyConfiguration()) {
       throw new Error("Invalid frequency configuration");
     }

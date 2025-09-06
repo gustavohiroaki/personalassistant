@@ -9,7 +9,6 @@ class DeleteRoutineUseCase implements IUseCase<string, boolean> {
   }
 
   async execute(id: string): Promise<boolean> {
-    // Verifica se a rotina existe antes de deletar
     const existingRoutine = await this.routineRepository.findById(id);
     if (!existingRoutine) {
       throw new Error("Routine not found");

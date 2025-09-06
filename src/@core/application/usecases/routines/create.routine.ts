@@ -12,7 +12,6 @@ class CreateRoutineUseCase implements IUseCase<IRoutineInput, boolean> {
   async execute(input: IRoutineInput): Promise<boolean> {
     const routine = new Routine(input);
 
-    // Validar configuração da frequência
     if (!routine.validateFrequencyConfiguration()) {
       throw new Error("Invalid frequency configuration");
     }

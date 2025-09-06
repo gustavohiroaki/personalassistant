@@ -15,13 +15,11 @@ class UpdateTaskUseCase implements IUseCase<UpdateTaskInput, boolean> {
   }
 
   async execute({ id, data }: UpdateTaskInput): Promise<boolean> {
-    // Primeiro busca a task existente
     const existingTask = await this.tasksRepository.findById(id);
     if (!existingTask) {
       throw new Error("Task not found");
     }
 
-    // Cria uma nova task com os dados atualizados
     const updatedTaskData: ITaskInput = {
       title: data.title ?? existingTask.title,
       description: data.description ?? existingTask.description,

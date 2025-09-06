@@ -15,7 +15,6 @@ const nextConfig: NextConfig = {
         oracledb: "commonjs oracledb",
       });
     } else {
-      // Para o lado cliente, substitui por módulos vazios
       config.resolve.fallback = {
         ...config.resolve.fallback,
         mysql: false,

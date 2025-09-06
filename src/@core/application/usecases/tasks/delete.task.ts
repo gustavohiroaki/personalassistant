@@ -9,7 +9,6 @@ class DeleteTaskUseCase implements IUseCase<string, boolean> {
   }
 
   async execute(id: string): Promise<boolean> {
-    // Verifica se a task existe antes de deletar
     const existingTask = await this.tasksRepository.findById(id);
     if (!existingTask) {
       throw new Error("Task not found");

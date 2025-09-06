@@ -42,7 +42,6 @@ export async function PATCH(
   }
 
   try {
-    // Converte datas se presentes
     if (dataToUpdate.startDate) {
       dataToUpdate.startDate = new Date(dataToUpdate.startDate);
     }

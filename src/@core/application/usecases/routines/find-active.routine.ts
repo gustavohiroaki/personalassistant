@@ -12,7 +12,7 @@ class FindActiveRoutinesUseCase implements IUseCase<null, IRoutineOutput[]> {
   async execute(): Promise<IRoutineOutput[]> {
     const routines = await this.routineRepository.findActiveRoutines();
     return routines
-      .filter((routine) => routine.isActive()) // Aplica validação de negócio
+      .filter((routine) => routine.isActive())
       .map((routine) => routine.toJSON());
   }
 }
