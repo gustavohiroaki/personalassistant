@@ -10,7 +10,7 @@ export default async function ConfigPage() {
 
     return (
         <CenteredContainer>
-            <form action={config}>
+            <form className="w-full max-w-lvw h-full bg-gray-800 shadow-lg rounded-lg p-8 flex flex-col gap-6 border border-gray-700" action={config}>
                 <InputGroup label={{ htmlFor: "user-prompt", text: "User prompt" }}>
                     <TextArea defaultValue={response.prompt} id="user-prompt" name="user-prompt" />
                 </InputGroup>

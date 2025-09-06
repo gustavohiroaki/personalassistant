@@ -14,6 +14,9 @@ export default function Home() {
         <RedirectButton href="/tasks" theme="gray">
           Minhas tarefas
         </RedirectButton>
+        <RedirectButton href="/day" theme="blue">
+          Meu Dia
+        </RedirectButton>
       </GridContainer>
     </CenteredContainer>
   );

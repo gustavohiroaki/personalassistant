@@ -11,7 +11,7 @@ import Button from "@/components/atoms/buttons/Button";
 
 export default async function EditTask({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [task] = await getTask(id);
+    const task = await getTask(id);
     const datestring = new Date(task.dueDate).toISOString().split('T')[0];
 
     const handleSubmit = async (formData: FormData) => {

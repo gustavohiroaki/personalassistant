@@ -19,6 +19,34 @@ export default class Database {
     );
   }
 
+  private buildQueryFilters(query: object): {
+    whereClause: string;
+    values: (string | number | boolean | null)[];
+  } {
+    const conditions: string[] = [];
+    const values: (string | number | boolean | null)[] = [];
+
+    for (const [key, value] of Object.entries(query)) {
+      if (typeof value === "object" && value !== null) {
+        for (const [operator, operatorValue] of Object.entries(value)) {
+          if (["=", ">", "<", ">=", "<=", "!="].includes(operator)) {
+            conditions.push(`${key} ${operator} ?`);
+            values.push(operatorValue as string | number | boolean | null);
+          }
+        }
+      } else {
+        conditions.push(`${key} = ?`);
+        values.push(value);
+      }
+    }
+
+    return {
+      whereClause:
+        conditions.length > 0 ? `AND ${conditions.join(" AND ")}` : "",
+      values,
+    };
+  }
+
   public async create(table: string, item: object): Promise<object> {
     const fieldNames = Object.keys(item);
     const fieldValues = Object.values(item);
@@ -40,10 +68,8 @@ export default class Database {
   }
 
   public async find(table: string, query: object = {}): Promise<object> {
-    const keys = Object.keys(query);
-    const values = Object.values(query);
-    const sqlFilters = keys.map((key) => `AND ${key} = ?`).join(" ");
-    const sql = `SELECT * FROM ${table} WHERE 1=1 ${sqlFilters} ORDER BY createdAt DESC`;
+    const { whereClause, values } = this.buildQueryFilters(query);
+    const sql = `SELECT * FROM ${table} WHERE 1=1 ${whereClause} ORDER BY createdAt DESC`;
     return await new Promise((resolve, reject) => {
       this.instance.all(sql, values, (err, rows) => {
         if (err) {
@@ -98,7 +124,7 @@ export default class Database {
 
   public async remove(table: string, id: string): Promise<boolean> {
     return await new Promise<boolean>((resolve, reject) => {
-      this.instance.run("DELETE FROM ${table} WHERE id = ?", [id], (err) => {
+      this.instance.run(`DELETE FROM ${table} WHERE id = ?`, [id], (err) => {
         if (err) {
           console.error("Error on removing item:", err.message);
           reject(err);

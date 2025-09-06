@@ -1,4 +1,4 @@
-import promptHelper from "@/backend/utils/prompt";
+import { makeCreatePromptUseCase } from "@/@core/application/usecases/prompt/factories/create.prompt.factory";
 import { NextResponse } from "next/server";
 
 const systemPrompt = `Você é um assistente especialista em produtividade e gestão de tempo.
@@ -13,8 +13,12 @@ Estruture sua resposta usando EXATAMENTE os seguintes títulos:
 export async function POST(request: Request) {
   const { title, description, priority, dueDate } = await request.json();
   const prompt = `Analise a tarefa a seguir e gere o guia de execução: Título: ${title};Descrição: ${description};Prioridade: ${priority};Data Limite: ${dueDate}`;
-  const response = await promptHelper(prompt, systemPrompt);
+
+  const response = await makeCreatePromptUseCase().execute({
+    prompt,
+    systemPrompt,
+  });
   return NextResponse.json({
-    message: response.output_text,
+    message: response,
   });
 }

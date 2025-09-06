@@ -1,17 +1,18 @@
-import db from "@/backend/database";
+import db from "@/old/database";
 
 export const migrate = () => {
   db().instance.serialize(() => {
     db().instance.run(
       `
             CREATE TABLE IF NOT EXISTS tasks (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id TEXT PRIMARY KEY,
                 title TEXT NOT NULL,
                 description TEXT,
                 dueDate TEXT,
                 priority TEXT,
                 completed BOOLEAN DEFAULT 0,
-                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP
             )
         `,
       (err) => {
@@ -24,16 +25,49 @@ export const migrate = () => {
     );
     db().instance.run(
       `
-            CREATE TABLE IF NOT EXISTS user_prompts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                prompt TEXT NOT NULL
+            CREATE TABLE IF NOT EXISTS prompts (
+                id TEXT PRIMARY KEY,
+                prompt TEXT NOT NULL,
+                systemPrompt TEXT,
+                response TEXT,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP
             )
         `,
       (err) => {
         if (err) {
-          console.error("Error creating user_prompts table:", err.message);
+          console.error("Error creating prompts table:", err.message);
         } else {
-          console.log("User Prompts table is ready.");
+          console.log("Prompts table is ready.");
+        }
+      }
+    );
+    db().instance.run(
+      `
+            CREATE TABLE IF NOT EXISTS routines (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                description TEXT,
+                frequency TEXT NOT NULL,
+                startDate TEXT NOT NULL,
+                endDate TEXT,
+                active BOOLEAN DEFAULT 1,
+                taskIds TEXT DEFAULT '[]',
+                daysOfWeek TEXT,
+                dayOfMonth INTEGER,
+                daysOfMonth TEXT,
+                month INTEGER,
+                dayOfYear INTEGER,
+                customRule TEXT,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP
+            )
+        `,
+      (err) => {
+        if (err) {
+          console.error("Error creating routines table:", err.message);
+        } else {
+          console.log("Routines table is ready.");
         }
       }
     );

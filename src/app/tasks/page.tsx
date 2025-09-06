@@ -1,9 +1,18 @@
-import { ITaskDb } from "@/entities/ITask";
+import { ITask } from "@/entities/ITask";
 import TasksPanel from "@/components/templates/TasksPanel";
 
 export default async function TaskList() {
-    const data = await fetch('http://localhost:3000/api/tasks', { method: 'GET' })
-    const tasks: ITaskDb[] = await data.json()
+    let tasks: ITask[] = [];
+
+    try {
+        const response = await fetch(`${process.env.API_URL}/api/tasks`, { method: 'GET' });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch tasks: ${response.statusText}`);
+        }
+        tasks = await response.json();
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+    }
 
     return (
         <TasksPanel initialTasks={tasks} />

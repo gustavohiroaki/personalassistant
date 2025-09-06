@@ -7,9 +7,11 @@ export default async function promptHelper(
   prompt: string,
   instructions?: string
 ) {
-  return client.responses.create({
+  const params = {
     model: "gpt-5-nano",
     input: prompt,
     ...(instructions ? { instructions } : {}),
-  });
+  };
+  console.log("Prompt Params:", params);
+  return client.responses.create(params);
 }
