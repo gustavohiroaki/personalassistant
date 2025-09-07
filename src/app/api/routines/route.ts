@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     return new Response("Missing required fields", { status: 400 });
   }
 
-  const routine = {
+  const routine: IRoutineInput = {
     title: body.title,
     description: body.description,
     frequency: body.frequency as
@@ -22,7 +22,6 @@ export async function POST(req: Request) {
     startDate: new Date(body.startDate),
     endDate: body.endDate ? new Date(body.endDate) : undefined,
     active: body.active ?? true,
-    taskIds: body.taskIds || [],
     daysOfWeek: body.daysOfWeek,
     dayOfMonth: body.dayOfMonth,
     daysOfMonth: body.daysOfMonth,

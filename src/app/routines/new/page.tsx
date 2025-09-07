@@ -24,7 +24,6 @@ export default function NewRoutinePage() {
         frequency: "daily",
         startDate: new Date(),
         active: true,
-        taskIds: [],
         daysOfWeek: [],
     });
 
