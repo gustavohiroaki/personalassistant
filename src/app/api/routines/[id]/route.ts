@@ -53,8 +53,12 @@ export async function PATCH(
       id: routineId,
       data: dataToUpdate,
     });
+
+    // Buscar a rotina atualizada para retornar
+    const updatedRoutine = await makeFindByIdRoutineUseCase().execute(routineId);
+    
     return new Response(
-      JSON.stringify({ message: "Routine updated successfully" }),
+      JSON.stringify(updatedRoutine),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {

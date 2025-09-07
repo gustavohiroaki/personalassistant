@@ -169,8 +169,8 @@ export default function RoutinesPage() {
                         <Card variant="elevated" className="max-w-md mx-auto">
                             <div className="text-center">
                                 <RoutineIcon className="mx-auto mb-4 w-16 h-16 text-gray-400" />
-                                <h3 className="text-lg font-semibold text-gray-700 mb-2">Nenhuma rotina ainda</h3>
-                                <p className="text-gray-500 mb-6">Crie sua primeira rotina para organizar seu dia a dia</p>
+                                <h3 className="text-lg font-semibold text-gray-100 mb-2">Nenhuma rotina ainda</h3>
+                                <p className="text-gray-300 mb-6">Crie sua primeira rotina para organizar seu dia a dia</p>
                                 <RedirectButton href="/routines/new" variant="primary" fullWidth icon={<PlusIcon />}>
                                     Criar primeira rotina
                                 </RedirectButton>
@@ -184,13 +184,13 @@ export default function RoutinesPage() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center space-x-2">
-                                            <RoutineIcon className="text-blue-600" />
-                                            <h3 className="text-lg font-semibold text-gray-800 truncate">{routine.title}</h3>
+                                            <RoutineIcon className="text-blue-400" />
+                                            <h3 className="text-lg font-semibold text-gray-100 truncate">{routine.title}</h3>
                                         </div>
                                         <div
                                             className={`px-2 py-1 rounded-full text-xs font-medium ${routine.active
-                                                    ? "bg-green-100 text-green-800"
-                                                    : "bg-gray-100 text-gray-800"
+                                                    ? "bg-green-700 text-green-200"
+                                                    : "bg-gray-700 text-gray-200"
                                                 }`}
                                         >
                                             {routine.active ? "Ativa" : "Inativa"}
@@ -198,28 +198,28 @@ export default function RoutinesPage() {
                                     </div>
 
                                     {routine.description && (
-                                        <p className="text-gray-600 text-sm line-clamp-2">{routine.description}</p>
+                                        <p className="text-gray-300 text-sm line-clamp-2">{routine.description}</p>
                                     )}
 
                                     <div className="space-y-3">
                                         <div className="flex items-center space-x-2">
-                                            <ClockIcon className="w-4 h-4 text-gray-500" />
+                                            <ClockIcon className="w-4 h-4 text-gray-400" />
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFrequencyColor(routine.frequency)}`}>
                                                 {getFrequencyLabel(routine.frequency)}
                                             </span>
                                         </div>
 
                                         <div className="flex items-center space-x-2">
-                                            <CalendarIcon className="w-4 h-4 text-gray-500" />
-                                            <span className="text-sm text-gray-600">
+                                            <CalendarIcon className="w-4 h-4 text-gray-400" />
+                                            <span className="text-sm text-gray-300">
                                                 Início: {new Date(routine.startDate).toLocaleDateString("pt-BR")}
                                             </span>
                                         </div>
 
                                         {routine.endDate && (
                                             <div className="flex items-center space-x-2">
-                                                <CalendarIcon className="w-4 h-4 text-gray-500" />
-                                                <span className="text-sm text-gray-600">
+                                                <CalendarIcon className="w-4 h-4 text-gray-400" />
+                                                <span className="text-sm text-gray-300">
                                                     Fim: {new Date(routine.endDate).toLocaleDateString("pt-BR")}
                                                 </span>
                                             </div>
@@ -227,14 +227,14 @@ export default function RoutinesPage() {
 
                                         {routine.taskIds && routine.taskIds.length > 0 && (
                                             <div className="flex items-center space-x-2">
-                                                <span className="text-xs text-gray-500">
+                                                <span className="text-xs text-gray-400">
                                                     {routine.taskIds.length} tarefa(s) vinculada(s)
                                                 </span>
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-200">
+                                    <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-700">
                                         <RedirectButton
                                             href={`/routines/edit/${routine.id}`}
                                             variant="outline"
