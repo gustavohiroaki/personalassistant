@@ -55,12 +55,14 @@ export async function PATCH(
     });
 
     // Buscar a rotina atualizada para retornar
-    const updatedRoutine = await makeFindByIdRoutineUseCase().execute(routineId);
-    
-    return new Response(
-      JSON.stringify(updatedRoutine),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+    const updatedRoutine = await makeFindByIdRoutineUseCase().execute(
+      routineId
     );
+
+    return new Response(JSON.stringify(updatedRoutine), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error updating routine:", error);
 

@@ -52,7 +52,6 @@ export const migrate = () => {
                 startDate TEXT NOT NULL,
                 endDate TEXT,
                 active BOOLEAN DEFAULT 1,
-                taskIds TEXT DEFAULT '[]',
                 daysOfWeek TEXT,
                 dayOfMonth INTEGER,
                 daysOfMonth TEXT,

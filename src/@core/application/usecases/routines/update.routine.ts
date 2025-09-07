@@ -27,7 +27,6 @@ class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
       startDate: data.startDate ?? existingRoutine.startDate,
       endDate: data.endDate ?? existingRoutine.endDate,
       active: data.active ?? existingRoutine.active,
-      taskIds: data.taskIds ?? existingRoutine.taskIds,
       daysOfWeek: data.daysOfWeek ?? existingRoutine.daysOfWeek,
       dayOfMonth: data.dayOfMonth ?? existingRoutine.dayOfMonth,
       daysOfMonth: data.daysOfMonth ?? existingRoutine.daysOfMonth,

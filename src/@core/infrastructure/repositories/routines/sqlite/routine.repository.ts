@@ -8,7 +8,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
 
     const dbData = {
       ...routineData,
-      taskIds: JSON.stringify(routineData.taskIds),
       daysOfWeek: routineData.daysOfWeek
         ? JSON.stringify(routineData.daysOfWeek)
         : null,
@@ -39,7 +38,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
 
     const dbData = {
       ...routineData,
-      taskIds: JSON.stringify(routineData.taskIds),
       daysOfWeek: routineData.daysOfWeek
         ? JSON.stringify(routineData.daysOfWeek)
         : null,
@@ -84,7 +82,6 @@ class RoutineSqliteRepository implements IRoutineRepository {
       startDate: dbRoutine.startDate as string,
       endDate: dbRoutine.endDate as string | undefined,
       active: Boolean(dbRoutine.active),
-      taskIds: dbRoutine.taskIds ? JSON.parse(dbRoutine.taskIds as string) : [],
       daysOfWeek: dbRoutine.daysOfWeek
         ? JSON.parse(dbRoutine.daysOfWeek as string)
         : undefined,

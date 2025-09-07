@@ -32,7 +32,6 @@ export class UpdateRoutineUseCase
       startDate: updates.startDate ?? existingRoutine.startDate,
       endDate: updates.endDate ?? existingRoutine.endDate,
       active: updates.active ?? existingRoutine.active,
-      taskIds: updates.taskIds ?? existingRoutine.taskIds,
       daysOfWeek: updates.daysOfWeek ?? existingRoutine.daysOfWeek,
       dayOfMonth: updates.dayOfMonth ?? existingRoutine.dayOfMonth,
       daysOfMonth: updates.daysOfMonth ?? existingRoutine.daysOfMonth,

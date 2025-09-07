@@ -189,8 +189,8 @@ export default function RoutinesPage() {
                                         </div>
                                         <div
                                             className={`px-2 py-1 rounded-full text-xs font-medium ${routine.active
-                                                    ? "bg-green-700 text-green-200"
-                                                    : "bg-gray-700 text-gray-200"
+                                                ? "bg-green-700 text-green-200"
+                                                : "bg-gray-700 text-gray-200"
                                                 }`}
                                         >
                                             {routine.active ? "Ativa" : "Inativa"}
@@ -221,14 +221,6 @@ export default function RoutinesPage() {
                                                 <CalendarIcon className="w-4 h-4 text-gray-400" />
                                                 <span className="text-sm text-gray-300">
                                                     Fim: {new Date(routine.endDate).toLocaleDateString("pt-BR")}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        {routine.taskIds && routine.taskIds.length > 0 && (
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-xs text-gray-400">
-                                                    {routine.taskIds.length} tarefa(s) vinculada(s)
                                                 </span>
                                             </div>
                                         )}

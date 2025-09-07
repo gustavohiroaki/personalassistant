@@ -16,7 +16,6 @@ export interface IRoutineInput {
   startDate: Date;
   endDate?: Date;
   active?: boolean;
-  taskIds?: string[];
   daysOfWeek?: number[];
   dayOfMonth?: number; // Para monthly: dia do mês (1-31)
   daysOfMonth?: number[]; // Para monthly múltiplos dias
@@ -35,7 +34,6 @@ export interface IRoutineOutput {
   startDate: string;
   endDate?: string;
   active: boolean;
-  taskIds: string[];
   daysOfWeek?: number[];
   dayOfMonth?: number;
   daysOfMonth?: number[];
@@ -54,7 +52,6 @@ export class Routine extends Entity {
   startDate: Date;
   endDate?: Date;
   active: boolean;
-  taskIds: string[];
   daysOfWeek?: number[];
   dayOfMonth?: number;
   daysOfMonth?: number[];
@@ -72,7 +69,6 @@ export class Routine extends Entity {
     this.startDate = input.startDate;
     this.endDate = input.endDate;
     this.active = input.active ?? true;
-    this.taskIds = input.taskIds ?? [];
     this.daysOfWeek = input.daysOfWeek;
     this.dayOfMonth = input.dayOfMonth;
     this.daysOfMonth = input.daysOfMonth;
@@ -92,7 +88,6 @@ export class Routine extends Entity {
       startDate: this.startDate.toISOString(),
       endDate: this.endDate?.toISOString(),
       active: this.active,
-      taskIds: this.taskIds,
       daysOfWeek: this.daysOfWeek,
       dayOfMonth: this.dayOfMonth,
       daysOfMonth: this.daysOfMonth,
@@ -110,7 +105,6 @@ export class Routine extends Entity {
       startDate: new Date(json.startDate),
       endDate: json.endDate ? new Date(json.endDate) : undefined,
       active: json.active,
-      taskIds: json.taskIds,
       daysOfWeek: json.daysOfWeek,
       dayOfMonth: json.dayOfMonth,
       daysOfMonth: json.daysOfMonth,
@@ -122,21 +116,6 @@ export class Routine extends Entity {
     routine.createdAt = new Date(json.createdAt);
     routine.updatedAt = json.updatedAt ? new Date(json.updatedAt) : undefined;
     return routine;
-  }
-
-  addTask(taskId: string): void {
-    if (!this.taskIds.includes(taskId)) {
-      this.taskIds.push(taskId);
-      this.updatedAt = new Date();
-    }
-  }
-
-  removeTask(taskId: string): void {
-    const index = this.taskIds.indexOf(taskId);
-    if (index > -1) {
-      this.taskIds.splice(index, 1);
-      this.updatedAt = new Date();
-    }
   }
 
   activate(): void {
