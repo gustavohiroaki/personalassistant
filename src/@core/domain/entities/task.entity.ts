@@ -6,6 +6,7 @@ export interface ITaskInput {
   dueDate: Date;
   priority: "low" | "medium" | "high";
   completed?: boolean;
+  category?: string; // Categoria da tarefa (ex: "trabalho", "pessoal", "estudos")
 }
 
 export interface ITaskOutput {
@@ -17,6 +18,7 @@ export interface ITaskOutput {
   dueDate: string;
   priority: "low" | "medium" | "high";
   completed: boolean;
+  category?: string;
 }
 
 export class Task extends Entity {
@@ -28,6 +30,7 @@ export class Task extends Entity {
   dueDate: Date;
   priority: "low" | "medium" | "high";
   completed: boolean;
+  category?: string;
 
   constructor(input: ITaskInput) {
     super();
@@ -38,6 +41,7 @@ export class Task extends Entity {
     this.dueDate = input.dueDate;
     this.priority = input.priority;
     this.completed = input.completed ?? false;
+    this.category = input.category;
   }
 
   toJSON(): ITaskOutput {
@@ -50,6 +54,7 @@ export class Task extends Entity {
       dueDate: this.dueDate.toISOString(),
       priority: this.priority,
       completed: this.completed,
+      category: this.category,
     };
   }
 
@@ -60,6 +65,7 @@ export class Task extends Entity {
       dueDate: new Date(json.dueDate),
       priority: json.priority,
       completed: json.completed,
+      category: json.category,
     });
     task.id = json.id;
     task.createdAt = new Date(json.createdAt);

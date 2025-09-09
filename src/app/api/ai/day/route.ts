@@ -1,35 +1,46 @@
-import repositories from "@/@core/repositories";
-import promptHelper from "@/old/utils/prompt";
-import { get } from "@/utils/fs-json";
 import { NextResponse } from "next/server";
-
-const systemPrompt = `Você é um assistente especialista em produtividade e gestão de tempo.
-  Sua resposta DEVE ser em JSON, sem texto adicional.
-  NÃO use saudações ou texto conversacional. Seja direto e objetivo.
-  A estrutura do JSON DEVE ser:
-  {
-    tip: "Dica geral para melhorar a produtividade",
-    challenges: ["3 desafios para ser uma pessoa melhor e mais produtiva"],
-    tasks: {
-      '00:00 - 01:00': {  'task': 'Descrição da tarefa', 'details': 'Detalhes adicionais', 'tips': 'Dicas para execução'  },
-      ...outras horas...
-    }
-  }
-  `;
+import { createSuggestDailyTasksUseCase } from "@/@core/application/usecases/day-plan/factories/suggest-daily-tasks.factory";
 
 export async function GET() {
-  const parametersJson = get()?.prompt;
-  const tasks = await repositories.task.find({
-    dueDate: {
-      "<=": new Date().toISOString(),
-    },
-  });
+  try {
+    const suggestDailyTasksUseCase = createSuggestDailyTasksUseCase();
+    
+    const result = await suggestDailyTasksUseCase.execute({
+      targetDate: new Date(),
+      workStartTime: "09:00",
+      workEndTime: "18:00",
+      wakeUpTime: "06:00",
+      sleepTime: "22:00",
+      focusAreas: ["trabalho", "produtividade"],
+      currentEnergy: 7,
+      availableTime: 8,
+    });
 
-  const tasksString = JSON.stringify(tasks);
-  console.log();
-  const prompt = `Com base nas seguintes tarefas: ${tasksString}, e considerando o seguinte contexto do usuário: ${parametersJson}, gere uma lista de tarefas para o dia sugerindo o que fazer em cada horário.`;
+    // Manter compatibilidade com o formato antigo
+    const legacyFormat = {
+      tip: result.tips[0] || "Mantenha o foco nas tarefas importantes",
+      challenges: result.tips.slice(1, 4),
+      tasks: result.hourlyPlan.reduce((acc, slot) => {
+        const activities = slot.activities.map(activity => ({
+          task: activity.title,
+          details: activity.description || "",
+          tips: `Duração estimada: ${activity.estimatedDuration} minutos`
+        }));
+        
+        if (activities.length > 0) {
+          acc[slot.timeSlot] = activities[0];
+        }
+        
+        return acc;
+      }, {} as Record<string, { task: string; details: string; tips: string }>)
+    };
 
-  const response = await promptHelper(prompt, systemPrompt);
-  const parsedResponse = JSON.parse(response.output_text);
-  return NextResponse.json(parsedResponse);
+    return NextResponse.json(legacyFormat);
+  } catch (error) {
+    console.error("Erro ao gerar sugestões:", error);
+    return NextResponse.json(
+      { error: "Erro interno do servidor" },
+      { status: 500 }
+    );
+  }
 }

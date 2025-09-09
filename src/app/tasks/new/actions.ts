@@ -11,7 +11,7 @@ export default async function create(formData: FormData) {
   const body: ITask = {
     title: title || "",
     description: description || "",
-    dueDate: dueDate || "",
+    dueDate: dueDate ? new Date(dueDate) : new Date(),
     priority: priority as "low" | "medium" | "high",
     completed: false,
   };

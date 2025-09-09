@@ -1,4 +1,4 @@
-import { hash } from "crypto";
+import { createHash } from "crypto";
 import { Entity } from "./entity";
 
 export interface IPromptInput {
@@ -25,10 +25,9 @@ export class Prompt extends Entity {
 
   constructor(input: IPromptInput) {
     super();
-    this.id = hash(
-      "SHA256",
-      `${input.prompt}${input.systemPrompt ? input.systemPrompt : ""}`
-    );
+    this.id = createHash("sha256")
+      .update(`${input.prompt}${input.systemPrompt ? input.systemPrompt : ""}`)
+      .digest("hex");
     this.createdAt = new Date();
     this.prompt = input.prompt;
     this.systemPrompt = input.systemPrompt;

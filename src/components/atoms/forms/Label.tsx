@@ -8,7 +8,7 @@ export default function Label({ children, ...props }: LabelProps) {
     return (
         <label
             {...props}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-300 mb-1"
         >
             {children}
         </label>
