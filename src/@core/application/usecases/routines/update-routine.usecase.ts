@@ -28,6 +28,7 @@ export class UpdateRoutineUseCase
     const updatedData: IRoutineInput = {
       title: updates.title ?? existingRoutine.title,
       description: updates.description ?? existingRoutine.description,
+      category: updates.category ?? existingRoutine.category,
       frequency: updates.frequency ?? existingRoutine.frequency,
       startDate: updates.startDate ?? existingRoutine.startDate,
       endDate: updates.endDate ?? existingRoutine.endDate,

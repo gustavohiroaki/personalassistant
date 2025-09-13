@@ -20,6 +20,20 @@ export const migrate = () => {
           console.error("Error creating tasks table:", err.message);
         } else {
           console.log("Tasks table is ready.");
+          // Add category column to tasks table
+          db().instance.run(
+            `ALTER TABLE tasks ADD COLUMN category TEXT`,
+            (err) => {
+              if (err) {
+                // Ignore error if column already exists
+                if (!err.message.includes("duplicate column name")) {
+                  console.error("Error adding category to tasks:", err.message);
+                }
+              } else {
+                console.log("Category column added to tasks table.");
+              }
+            }
+          );
         }
       }
     );
@@ -67,6 +81,23 @@ export const migrate = () => {
           console.error("Error creating routines table:", err.message);
         } else {
           console.log("Routines table is ready.");
+          // Add category column to routines table
+          db().instance.run(
+            `ALTER TABLE routines ADD COLUMN category TEXT`,
+            (err) => {
+              if (err) {
+                // Ignore error if column already exists
+                if (!err.message.includes("duplicate column name")) {
+                  console.error(
+                    "Error adding category to routines:",
+                    err.message
+                  );
+                }
+              } else {
+                console.log("Category column added to routines table.");
+              }
+            }
+          );
         }
       }
     );

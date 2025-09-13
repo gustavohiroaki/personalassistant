@@ -12,6 +12,7 @@ type TRoutineFrequency =
 export interface IRoutineInput {
   title: string;
   description?: string;
+  category?: string;
   frequency: TRoutineFrequency;
   startDate: Date;
   endDate?: Date;
@@ -30,6 +31,7 @@ export interface IRoutineOutput {
   updatedAt?: string;
   title: string;
   description?: string;
+  category?: string;
   frequency: TRoutineFrequency;
   startDate: string;
   endDate?: string;
@@ -48,6 +50,7 @@ export class Routine extends Entity {
   updatedAt?: Date;
   title: string;
   description?: string;
+  category?: string;
   frequency: TRoutineFrequency;
   startDate: Date;
   endDate?: Date;
@@ -65,6 +68,7 @@ export class Routine extends Entity {
     this.createdAt = new Date();
     this.title = input.title;
     this.description = input.description;
+    this.category = input.category;
     this.frequency = input.frequency;
     this.startDate = input.startDate;
     this.endDate = input.endDate;
@@ -84,6 +88,7 @@ export class Routine extends Entity {
       updatedAt: this.updatedAt?.toISOString(),
       title: this.title,
       description: this.description,
+      category: this.category,
       frequency: this.frequency,
       startDate: this.startDate.toISOString(),
       endDate: this.endDate?.toISOString(),
@@ -101,6 +106,7 @@ export class Routine extends Entity {
     const routine = new Routine({
       title: json.title,
       description: json.description,
+      category: json.category,
       frequency: json.frequency,
       startDate: new Date(json.startDate),
       endDate: json.endDate ? new Date(json.endDate) : undefined,

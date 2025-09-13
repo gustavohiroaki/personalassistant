@@ -72,6 +72,7 @@ class RoutineSqliteRepository implements IRoutineRepository {
       updatedAt: dbRoutine.updatedAt as string | undefined,
       title: dbRoutine.title as string,
       description: dbRoutine.description as string | undefined,
+      category: dbRoutine.category as string | undefined,
       frequency: dbRoutine.frequency as
         | "once"
         | "daily"

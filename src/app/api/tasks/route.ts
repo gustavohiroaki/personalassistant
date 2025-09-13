@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     dueDate: new Date(body.dueDate),
     priority: body.priority as "low" | "medium" | "high",
     completed: body.completed || false,
+    category: body.category,
   };
 
   try {

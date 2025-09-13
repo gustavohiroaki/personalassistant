@@ -25,6 +25,7 @@ export default function RoutinesPage() {
     const [routines, setRoutines] = useState<IRoutineOutput[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     useEffect(() => {
         fetchRoutines();
@@ -117,6 +118,12 @@ export default function RoutinesPage() {
         return colors[frequency] || "bg-gray-700 text-gray-200";
     };
 
+    const categories = [...new Set(routines.map(routine => routine.category).filter(Boolean))] as string[];
+
+    const filteredRoutines = selectedCategory
+        ? routines.filter(routine => routine.category === selectedCategory)
+        : routines;
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -164,28 +171,40 @@ export default function RoutinesPage() {
                     </RedirectButton>
                 </div>
 
-                {routines.length === 0 ? (
+                <div className="mb-4 flex flex-wrap gap-2">
+                    <button onClick={() => setSelectedCategory(null)} className={`px-3 py-1 rounded-full text-sm ${!selectedCategory ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                        Todas
+                    </button>
+                    {categories.map(category => (
+                        <button key={category} onClick={() => setSelectedCategory(category)} className={`px-3 py-1 rounded-full text-sm ${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                            {category}
+                        </button>
+                    ))}
+                </div>
+
+                {filteredRoutines.length === 0 ? (
                     <div className="text-center py-16">
                         <Card variant="elevated" className="max-w-md mx-auto">
                             <div className="text-center">
                                 <RoutineIcon className="mx-auto mb-4 w-16 h-16 text-gray-400" />
-                                <h3 className="text-lg font-semibold text-gray-100 mb-2">Nenhuma rotina ainda</h3>
-                                <p className="text-gray-300 mb-6">Crie sua primeira rotina para organizar seu dia a dia</p>
+                                <h3 className="text-lg font-semibold text-gray-100 mb-2">Nenhuma rotina encontrada</h3>
+                                <p className="text-gray-300 mb-6">Crie uma nova rotina ou limpe os filtros.</p>
                                 <RedirectButton href="/routines/new" variant="primary" fullWidth icon={<PlusIcon />}>
-                                    Criar primeira rotina
+                                    Criar rotina
                                 </RedirectButton>
                             </div>
                         </Card>
                     </div>
                 ) : (
                     <GridContainer cols={3} gap={6}>
-                        {routines.map((routine) => (
+                        {filteredRoutines.map((routine) => (
                             <Card key={routine.id} variant="elevated" className="hover:scale-105 transition-transform">
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center space-x-2">
                                             <RoutineIcon className="text-blue-400" />
                                             <h3 className="text-lg font-semibold text-gray-100 truncate">{routine.title}</h3>
+                                            {routine.category && <span className="text-xs bg-gray-600 text-gray-200 px-2 py-1 rounded-full">{routine.category}</span>}
                                         </div>
                                         <div
                                             className={`px-2 py-1 rounded-full text-xs font-medium ${routine.active

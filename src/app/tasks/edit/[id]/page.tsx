@@ -40,6 +40,9 @@ export default async function EditTask({ params }: { params: Promise<{ id: strin
                         { value: "high", label: "Alta" }
                     ]} defaultValue={task.priority} name="priority" id="priority" />
                 </InputGroup>
+                <InputGroup label={{ htmlFor: "category", text: "Categoria" }}>
+                    <Input defaultValue={task.category} type="text" name="category" id="category" placeholder="Digite a categoria" />
+                </InputGroup>
                 <Button type="submit">
                     Criar Tarefa
                 </Button>

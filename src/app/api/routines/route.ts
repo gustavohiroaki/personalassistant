@@ -12,6 +12,7 @@ export async function POST(req: Request) {
   const routine: IRoutineInput = {
     title: body.title,
     description: body.description,
+    category: body.category,
     frequency: body.frequency as
       | "once"
       | "daily"

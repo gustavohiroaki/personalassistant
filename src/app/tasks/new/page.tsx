@@ -29,6 +29,9 @@ export default function NewTask() {
                         { value: "high", label: "Alta" }
                     ]} name="priority" id="priority" />
                 </InputGroup>
+                <InputGroup label={{ htmlFor: "category", text: "Categoria" }}>
+                    <Input type="text" name="category" id="category" placeholder="Digite a categoria" />
+                </InputGroup>
                 <Button type="submit">
                     Criar Tarefa
                 </Button>

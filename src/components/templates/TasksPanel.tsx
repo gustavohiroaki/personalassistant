@@ -22,6 +22,13 @@ export default function TasksPanel({ initialTasks }: TasksPanelProps) {
     const [modalOpen, setModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
     const [modalContent, setModalContent] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+    const categories = [...new Set(initialTasks.map(task => task.category).filter(Boolean))] as string[];
+
+    const filteredTasks = selectedCategory
+        ? tasks.filter(task => task.category === selectedCategory)
+        : tasks;
 
     const handleCloseButtonClick = (id: string) => {
         remove(id).then(() => {
@@ -60,7 +67,8 @@ export default function TasksPanel({ initialTasks }: TasksPanelProps) {
                 title: task.title,
                 description: task.description,
                 dueDate: task.dueDate,
-                priority: task.priority
+                priority: task.priority,
+                category: task.category
             })
         }).then(response => response.json()).then(data => {
             setModalContent(data.message)
@@ -70,12 +78,25 @@ export default function TasksPanel({ initialTasks }: TasksPanelProps) {
 
     return (
         <CenteredContainer justify="start">
+            <div className="mb-4 flex flex-wrap gap-2">
+                <button onClick={() => setSelectedCategory(null)} className={`px-3 py-1 rounded-full text-sm ${!selectedCategory ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                    Todas
+                </button>
+                {categories.map(category => (
+                    <button key={category} onClick={() => setSelectedCategory(category)} className={`px-3 py-1 rounded-full text-sm ${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                        {category}
+                    </button>
+                ))}
+            </div>
             <GridContainer cols={2}>
-                {tasks.map(task => (
+                {filteredTasks.map(task => (
                     <Card key={task.id}>
                         <div>
                             <div className="flex flex-row justify-between items-start">
-                                <h1 className="text-3xl text-gray-100 mb-3 ">{task.title}</h1>
+                                <div>
+                                    <h1 className="text-3xl text-gray-100 mb-3 ">{task.title}</h1>
+                                    {task.category && <p className="text-sm text-gray-400 bg-gray-700 rounded-full px-3 py-1 inline-block">{task.category}</p>}
+                                </div>
                                 <CloseButton onClick={() => task.id ? handleCloseButtonClick(task.id) : null} />
                             </div>
                             <p className="text-gray-200">{new Intl.DateTimeFormat("pt-BR", { timeZone: 'UTC' }).format(new Date(task.dueDate)).toString()}</p>

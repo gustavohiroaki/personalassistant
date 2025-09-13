@@ -27,6 +27,7 @@ export default function EditRoutinePage() {
     const [formData, setFormData] = useState<Partial<IRoutineInput>>({
         title: "",
         description: "",
+        category: "",
         frequency: "daily",
         startDate: new Date(),
         active: true,
@@ -47,6 +48,7 @@ export default function EditRoutinePage() {
             setFormData({
                 title: data.title,
                 description: data.description,
+                category: data.category,
                 frequency: data.frequency,
                 startDate: new Date(data.startDate),
                 endDate: data.endDate ? new Date(data.endDate) : undefined,
@@ -222,6 +224,17 @@ export default function EditRoutinePage() {
                                         onChange={(e) => handleInputChange("description", e.target.value)}
                                         placeholder="Descreva a rotina..."
                                         rows={3}
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <Label htmlFor="category">Categoria</Label>
+                                    <Input
+                                        id="category"
+                                        type="text"
+                                        value={formData.category || ""}
+                                        onChange={(e) => handleInputChange("category", e.target.value)}
+                                        placeholder="Ex: Trabalho, Pessoal"
                                     />
                                 </div>
 

@@ -21,6 +21,7 @@ export default function NewRoutinePage() {
     const [formData, setFormData] = useState<Partial<IRoutineInput>>({
         title: "",
         description: "",
+        category: "",
         frequency: "daily",
         startDate: new Date(),
         active: true,
@@ -146,6 +147,17 @@ export default function NewRoutinePage() {
                                         onChange={(e) => handleInputChange("description", e.target.value)}
                                         placeholder="Descreva a rotina..."
                                         rows={3}
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <Label htmlFor="category">Categoria</Label>
+                                    <Input
+                                        id="category"
+                                        type="text"
+                                        value={formData.category || ""}
+                                        onChange={(e) => handleInputChange("category", e.target.value)}
+                                        placeholder="Ex: Trabalho, Pessoal"
                                     />
                                 </div>
 

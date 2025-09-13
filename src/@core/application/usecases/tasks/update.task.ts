@@ -26,6 +26,7 @@ class UpdateTaskUseCase implements IUseCase<UpdateTaskInput, boolean> {
       dueDate: data.dueDate ? new Date(data.dueDate) : existingTask.dueDate,
       priority: data.priority ?? existingTask.priority,
       completed: data.completed ?? existingTask.completed,
+      category: data.category ?? existingTask.category,
     };
 
     const updatedTask = new Task(updatedTaskData);
