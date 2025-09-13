@@ -1,7 +1,6 @@
 import { PromptSqliteRepository } from "@/@core/infrastructure/repositories/prompts/sqlite/prompt.repository";
 import { CreatePromptUseCase } from "../create.prompt";
 import { OpenAIClient } from "@/@core/infrastructure/clients/openai/client.openai";
-
 export const makeCreatePromptUseCase = (): CreatePromptUseCase => {
   const aiClient = new OpenAIClient(
     process.env.OPENAI_API_KEY || "",

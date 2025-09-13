@@ -1,11 +1,9 @@
 import { Routine } from "@/@core/domain/entities/routine.entity";
 import db from "../../../database/sqlite-connection";
 import { IRoutineRepository } from "../routines.repository.interface";
-
 class RoutineSqliteRepository implements IRoutineRepository {
   async create(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
-
     const dbData = {
       ...routineData,
       daysOfWeek: routineData.daysOfWeek
@@ -15,16 +13,13 @@ class RoutineSqliteRepository implements IRoutineRepository {
         ? JSON.stringify(routineData.daysOfMonth)
         : null,
     };
-
     await db("routines").insert(dbData);
     return true;
   }
-
   async findAll(): Promise<Routine[]> {
     const routines = await db("routines").select("*");
     return routines.map((routine) => this.mapFromDatabase(routine));
   }
-
   async findById(id: string): Promise<Routine | null> {
     const routine = await db("routines").where({ id }).first();
     if (!routine) {
@@ -32,10 +27,8 @@ class RoutineSqliteRepository implements IRoutineRepository {
     }
     return this.mapFromDatabase(routine);
   }
-
   async update(entity: Routine): Promise<boolean> {
     const routineData = entity.toJSON();
-
     const dbData = {
       ...routineData,
       daysOfWeek: routineData.daysOfWeek
@@ -45,26 +38,21 @@ class RoutineSqliteRepository implements IRoutineRepository {
         ? JSON.stringify(routineData.daysOfMonth)
         : null,
     };
-
     await db("routines").where({ id: entity.id }).update(dbData);
     return true;
   }
-
   async delete(id: string): Promise<boolean> {
     await db("routines").where({ id }).delete();
     return true;
   }
-
   async findActiveRoutines(): Promise<Routine[]> {
     const routines = await db("routines").where({ active: true }).select("*");
     return routines.map((routine) => this.mapFromDatabase(routine));
   }
-
   async findByFrequency(frequency: string): Promise<Routine[]> {
     const routines = await db("routines").where({ frequency }).select("*");
     return routines.map((routine) => this.mapFromDatabase(routine));
   }
-
   private mapFromDatabase(dbRoutine: Record<string, unknown>): Routine {
     const routineData = {
       id: dbRoutine.id as string,
@@ -94,9 +82,7 @@ class RoutineSqliteRepository implements IRoutineRepository {
       dayOfYear: dbRoutine.dayOfYear as number | undefined,
       customRule: dbRoutine.customRule as string | undefined,
     };
-
     return Routine.fromJSON(routineData);
   }
 }
-
 export default RoutineSqliteRepository;

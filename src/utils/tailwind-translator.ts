@@ -8,14 +8,12 @@ export const gapClasses = {
     10: "gap-10",
     12: "gap-12",
 }
-
 export const colClasses = {
     1: "grid-cols-1",
     2: "grid-cols-2",
     3: "grid-cols-3",
     4: "grid-cols-4",
 }
-
 export const justifyClasses = {
     start: "justify-start",
     center: "justify-center",
@@ -23,7 +21,6 @@ export const justifyClasses = {
     between: "justify-between",
     around: "justify-around",
 }
-
 export const colors = {
     primary: "bg-blue-500 text-white",
     secondary: "bg-gray-500 text-white",
@@ -36,13 +33,11 @@ export const colors = {
     transparent: "bg-transparent text-black",
     gray: "bg-gray-500 text-white"
 }
-
 export const hoverHelper = (color: string) => {
     const colorGrade = color.split("-")[2];
     return `hover:bg-${color.split("-")[1]}-${parseInt(colorGrade) + 100} transition-colors`;
 };
 export const build = (classesArr: Array<string>) => classesArr.join(' ');
-
 export type Cols = keyof typeof colClasses;
 export type Gap = keyof typeof gapClasses;
 export type Justify = keyof typeof justifyClasses;

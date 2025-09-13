@@ -8,18 +8,15 @@ import TextArea from "@/components/atoms/forms/TextArea";
 import Select from "@/components/atoms/forms/Select";
 import InputGroup from "@/components/atoms/forms/InputGroup";
 import Button from "@/components/atoms/buttons/Button";
-
 export default async function EditTask({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const task = await getTask(id);
     const datestring = new Date(task.dueDate).toISOString().split('T')[0];
-
     const handleSubmit = async (formData: FormData) => {
         'use server';
         await edit(formData, id);
         redirect('/tasks');
     };
-
     return (
         <CenteredContainer>
             <form action={handleSubmit} className="w-full max-w-md bg-gray-800 shadow-lg rounded-lg p-8 flex flex-col gap-6 border border-gray-700">

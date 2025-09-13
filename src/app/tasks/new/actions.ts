@@ -1,14 +1,11 @@
 "use server";
-
 import { ITask } from "@/entities/ITask";
-
 export default async function create(formData: FormData) {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const dueDate = formData.get("dueDate")?.toString();
   const priority = formData.get("priority")?.toString();
   const category = formData.get("category")?.toString();
-
   const body: ITask = {
     title: title || "",
     description: description || "",
@@ -17,8 +14,7 @@ export default async function create(formData: FormData) {
     completed: false,
     category: category,
   };
-
-  await fetch("http://localhost:3000/api/tasks", {
+  await fetch("http:
     method: "POST",
     headers: {
       "Content-Type": "application/json",

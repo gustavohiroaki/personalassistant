@@ -1,7 +1,5 @@
 import { build } from "@/utils/tailwind-translator";
 import { InputHTMLAttributes } from "react"
-
-
 export default function Input({ ...props }: InputHTMLAttributes<HTMLInputElement>) {
     const classes = build([
         'px-3',

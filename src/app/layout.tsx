@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/molecules/Header";
-
 export const metadata: Metadata = {
   title: "Personal Assistant",
   description: "An app to manage your daily tasks",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

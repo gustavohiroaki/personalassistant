@@ -1,14 +1,11 @@
 "use server";
-
 import { ITask } from "@/entities/ITask";
-
 export async function edit(formData: FormData, id: string) {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const dueDate = formData.get("dueDate")?.toString();
   const priority = formData.get("priority")?.toString();
   const category = formData.get("category")?.toString();
-
   const body: ITask = {
     title: title || "",
     description: description || "",
@@ -17,8 +14,7 @@ export async function edit(formData: FormData, id: string) {
     completed: false,
     category: category,
   };
-
-  await fetch(`http://localhost:3000/api/tasks/${id}`, {
+  await fetch(`http:
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -26,14 +22,12 @@ export async function edit(formData: FormData, id: string) {
     body: JSON.stringify(body),
   });
 }
-
 export async function getTask(id: string) {
-  const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+  const response = await fetch(`http:
     method: "GET",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch task");
   }
-
   return response.json();
 }

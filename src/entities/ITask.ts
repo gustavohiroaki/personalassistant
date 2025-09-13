@@ -7,7 +7,6 @@ export interface ITask {
   completed: boolean;
   createdAt?: Date;
 }
-
 export interface ITaskCreate {
   title: string;
   description: string;
@@ -15,7 +14,6 @@ export interface ITaskCreate {
   priority: "low" | "medium" | "high";
   completed?: boolean;
 }
-
 export interface ITaskUpdate {
   title?: string;
   description?: string;

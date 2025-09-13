@@ -1,5 +1,4 @@
 'use client'
-
 import { ITask } from "@/entities/ITask";
 import CloseButton from "../atoms/buttons/CloseButton";
 import CardFooter from "../molecules/CardFooter";
@@ -12,30 +11,24 @@ import { redirect } from "next/navigation";
 import Modal from "../atoms/Modal";
 import MarkdownRenderer from "../atoms/MarkdownRenderer";
 import Loading from "../atoms/Loading";
-
 interface TasksPanelProps {
     initialTasks: ITask[]
 }
-
 export default function TasksPanel({ initialTasks }: TasksPanelProps) {
     const [tasks, setTasks] = useState(initialTasks)
     const [modalOpen, setModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
     const [modalContent, setModalContent] = useState("")
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
     const categories = [...new Set(initialTasks.map(task => task.category).filter(Boolean))] as string[];
-
     const filteredTasks = selectedCategory
         ? tasks.filter(task => task.category === selectedCategory)
         : tasks;
-
     const handleCloseButtonClick = (id: string) => {
         remove(id).then(() => {
             setTasks(tasks.filter(item => item.id !== id))
         })
     }
-
     const handleCheckboxChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
         const isChecked = event.target.checked;
         const updatedTasks = tasks.map(task => {
@@ -45,16 +38,13 @@ export default function TasksPanel({ initialTasks }: TasksPanelProps) {
             return task;
         });
         setTasks(updatedTasks);
-
         patch(id, { completed: isChecked }).catch(error => {
             console.error("Failed to update task status:", error);
         });
     };
-
     const handleCloseModal = () => {
         setModalOpen(!modalOpen);
     }
-
     const handleOpenModal = (task: ITask) => {
         setIsLoading(true)
         setModalOpen(true)
@@ -75,7 +65,6 @@ export default function TasksPanel({ initialTasks }: TasksPanelProps) {
             setIsLoading(false)
         })
     }
-
     return (
         <CenteredContainer justify="start">
             <div className="mb-4 flex flex-wrap gap-2">

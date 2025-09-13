@@ -3,7 +3,6 @@ import Title from "@/components/atoms/texts/Title";
 import CenteredContainer from "@/components/organisms/CenteredContainer";
 import GridContainer from "@/components/organisms/GridContainer";
 import { TaskIcon, RoutineIcon, CalendarIcon, PlusIcon } from "@/components/atoms/icons/Icons";
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
@@ -12,7 +11,6 @@ export default function Home() {
           <Title>Personal Assistant</Title>
           <p className="text-gray-300 mt-2 text-lg">Organize suas tarefas e rotinas de forma inteligente</p>
         </div>
-
         <GridContainer cols={2} gap={4}>
           <div className="space-y-4">
             <div className="space-y-3">
@@ -24,7 +22,6 @@ export default function Home() {
               </RedirectButton>
             </div>
           </div>
-
           <div className="space-y-4">
             <div className="space-y-3">
               <RedirectButton href="/routines/new" variant="success" fullWidth icon={<PlusIcon />}>
@@ -36,7 +33,6 @@ export default function Home() {
             </div>
           </div>
         </GridContainer>
-
         <div className="mt-8 text-center">
           <RedirectButton href="/day" variant="primary" size="lg" icon={<CalendarIcon />}>
             Planejar Meu Dia

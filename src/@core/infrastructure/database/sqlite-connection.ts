@@ -1,6 +1,5 @@
 import knex from "knex";
 import path from "path";
-
 const db = knex({
   client: "better-sqlite3",
   connection: {
@@ -9,5 +8,4 @@ const db = knex({
   useNullAsDefault: true,
   acquireConnectionTimeout: 60000,
 });
-
 export default db;

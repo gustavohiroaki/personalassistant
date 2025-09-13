@@ -1,11 +1,9 @@
 import { createHash } from "crypto";
 import { Entity } from "./entity";
-
 export interface IPromptInput {
   systemPrompt?: string;
   prompt: string;
 }
-
 export interface IPromptOutput {
   id: string;
   createdAt: string;
@@ -14,7 +12,6 @@ export interface IPromptOutput {
   systemPrompt?: string;
   response?: string;
 }
-
 export class Prompt extends Entity {
   id: string;
   createdAt: Date;
@@ -22,7 +19,6 @@ export class Prompt extends Entity {
   prompt: string;
   systemPrompt?: string;
   response?: string;
-
   constructor(input: IPromptInput) {
     super();
     this.id = createHash("sha256")
@@ -32,7 +28,6 @@ export class Prompt extends Entity {
     this.prompt = input.prompt;
     this.systemPrompt = input.systemPrompt;
   }
-
   toJSON(): IPromptOutput {
     return {
       id: this.id,
@@ -43,7 +38,6 @@ export class Prompt extends Entity {
       response: this.response,
     };
   }
-
   static fromJSON(json: IPromptOutput): Prompt {
     const prompt = new Prompt({
       prompt: json.prompt,
@@ -55,7 +49,6 @@ export class Prompt extends Entity {
     prompt.response = json.response;
     return prompt;
   }
-
   setResponse(response: string) {
     this.response = response;
   }

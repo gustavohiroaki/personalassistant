@@ -1,6 +1,4 @@
 import { TextareaHTMLAttributes } from "react"
-
-
 export default function TextArea({ ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
     return (
         <textarea

@@ -3,26 +3,17 @@ import { TaskSqliteRepository } from "@/@core/infrastructure/repositories/tasks/
 import RoutineSqliteRepository from "@/@core/infrastructure/repositories/routines/sqlite/routine.repository";
 import { Task } from "@/@core/domain/entities/task.entity";
 import { Routine } from "@/@core/domain/entities/routine.entity";
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const dateParam = searchParams.get("date");
     const date = dateParam ? new Date(dateParam) : new Date();
-
-    // Inicializar repositórios
     const taskRepository = new TaskSqliteRepository();
     const routineRepository = new RoutineSqliteRepository();
-    
-    // Buscar dados
     const allTasks = await taskRepository.findAll();
     const allRoutines = await routineRepository.findAll();
-    
-    // Filtrar tarefas relevantes
     const relevantTasks = allTasks.filter(task => !task.completed);
     const activeRoutines = allRoutines.filter(routine => routine.active);
-
-    // Criar um plano básico sem IA
     const fallbackPlan = {
       date: date.toISOString(),
       summary: {
@@ -40,7 +31,6 @@ export async function GET(request: NextRequest) {
       ],
       motivationalMessage: "Hoje é um novo dia cheio de oportunidades! Você tem tudo o que precisa para ser produtivo e alcançar seus objetivos."
     };
-
     return NextResponse.json(fallbackPlan);
   } catch (error) {
     console.error("Erro ao gerar plano básico:", error);
@@ -53,18 +43,14 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
 function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
   const hourlyPlan = [];
   let currentHour = 9;
   let taskIndex = 0;
   let routineIndex = 0;
-
   while (currentHour < 18 && (taskIndex < tasks.length || routineIndex < routines.length)) {
     const timeSlot = `${currentHour.toString().padStart(2, "0")}:00 - ${(currentHour + 1).toString().padStart(2, "0")}:00`;
     const activities = [];
-
-    // Adicionar rotinas de manhã
     if (currentHour <= 10 && routineIndex < routines.length) {
       const routine = routines[routineIndex];
       activities.push({
@@ -76,8 +62,6 @@ function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
       });
       routineIndex++;
     }
-
-    // Adicionar tarefas
     if (taskIndex < tasks.length) {
       const task = tasks[taskIndex];
       activities.push({
@@ -91,8 +75,6 @@ function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
       });
       taskIndex++;
     }
-
-    // Adicionar pausa se necessário
     if (currentHour === 12) {
       activities.push({
         type: "break",
@@ -110,15 +92,11 @@ function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
         category: "descanso"
       });
     }
-
     if (activities.length > 0) {
       hourlyPlan.push({ timeSlot, activities });
     }
-
     currentHour++;
   }
-
-  // Se não há atividades suficientes, adicionar algumas sugestões
   if (hourlyPlan.length === 0) {
     hourlyPlan.push({
       timeSlot: "09:00 - 10:00",
@@ -130,7 +108,6 @@ function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
         category: "planejamento"
       }]
     });
-    
     hourlyPlan.push({
       timeSlot: "10:00 - 11:00",
       activities: [{
@@ -142,6 +119,5 @@ function generateBasicHourlyPlan(tasks: Task[], routines: Routine[]) {
       }]
     });
   }
-
   return hourlyPlan;
 }

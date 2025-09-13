@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IRoutineInput } from "@/@core/domain/entities/routine.entity";
@@ -12,12 +11,10 @@ import TextArea from "@/components/atoms/forms/TextArea";
 import Select from "@/components/atoms/forms/Select";
 import Label from "@/components/atoms/forms/Label";
 import { ArrowLeftIcon } from "@/components/atoms/icons/Icons";
-
 export default function NewRoutinePage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     const [formData, setFormData] = useState<Partial<IRoutineInput>>({
         title: "",
         description: "",
@@ -27,7 +24,6 @@ export default function NewRoutinePage() {
         active: true,
         daysOfWeek: [],
     });
-
     const handleInputChange = (
         field: keyof IRoutineInput,
         value: string | boolean | Date | number | number[]
@@ -37,30 +33,24 @@ export default function NewRoutinePage() {
             [field]: value,
         }));
     };
-
     const handleDaysOfWeekChange = (day: number) => {
         const currentDays = formData.daysOfWeek || [];
         const newDays = currentDays.includes(day)
             ? currentDays.filter((d) => d !== day)
             : [...currentDays, day];
-
         setFormData((prev) => ({
             ...prev,
             daysOfWeek: newDays,
         }));
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!formData.title || !formData.frequency || !formData.startDate) {
             setError("Título, frequência e data de início são obrigatórios");
             return;
         }
-
         setLoading(true);
         setError(null);
-
         try {
             const response = await fetch("/api/routines", {
                 method: "POST",
@@ -69,11 +59,9 @@ export default function NewRoutinePage() {
                 },
                 body: JSON.stringify(formData),
             });
-
             if (!response.ok) {
                 throw new Error("Erro ao criar rotina");
             }
-
             router.push("/routines");
         } catch (err) {
             setError(err instanceof Error ? err.message : "Erro desconhecido");
@@ -81,7 +69,6 @@ export default function NewRoutinePage() {
             setLoading(false);
         }
     };
-
     const weekDays = [
         { value: 0, label: "Domingo" },
         { value: 1, label: "Segunda" },
@@ -91,7 +78,6 @@ export default function NewRoutinePage() {
         { value: 5, label: "Sexta" },
         { value: 6, label: "Sábado" },
     ];
-
     const frequencyOptions = [
         { value: "once", label: "Uma vez" },
         { value: "daily", label: "Diário" },
@@ -100,7 +86,6 @@ export default function NewRoutinePage() {
         { value: "yearly", label: "Anual" },
         { value: "custom", label: "Personalizado" },
     ];
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
             <div className="container mx-auto px-4 py-8">
@@ -114,7 +99,6 @@ export default function NewRoutinePage() {
                             <p className="text-gray-300 mt-1">Crie uma nova rotina para organizar seu dia</p>
                         </div>
                     </div>
-
                     <Card variant="elevated" className="shadow-xl">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {error && (
@@ -125,7 +109,6 @@ export default function NewRoutinePage() {
                                     </div>
                                 </div>
                             )}
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="md:col-span-2">
                                     <Label htmlFor="title">Título *</Label>
@@ -138,7 +121,6 @@ export default function NewRoutinePage() {
                                         required
                                     />
                                 </div>
-
                                 <div className="md:col-span-2">
                                     <Label htmlFor="description">Descrição</Label>
                                     <TextArea
@@ -149,7 +131,6 @@ export default function NewRoutinePage() {
                                         rows={3}
                                     />
                                 </div>
-
                                 <div className="md:col-span-2">
                                     <Label htmlFor="category">Categoria</Label>
                                     <Input
@@ -160,7 +141,6 @@ export default function NewRoutinePage() {
                                         placeholder="Ex: Trabalho, Pessoal"
                                     />
                                 </div>
-
                                 <div>
                                     <Label htmlFor="frequency">Frequência *</Label>
                                     <Select
@@ -171,7 +151,6 @@ export default function NewRoutinePage() {
                                         required
                                     />
                                 </div>
-
                                 <div className="flex items-center space-x-2 pt-6">
                                     <input
                                         id="active"
@@ -183,7 +162,6 @@ export default function NewRoutinePage() {
                                     <Label htmlFor="active">Rotina ativa</Label>
                                 </div>
                             </div>
-
                             {formData.frequency === "weekly" && (
                                 <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
                                     <Label>Dias da semana</Label>
@@ -205,7 +183,6 @@ export default function NewRoutinePage() {
                                     </div>
                                 </div>
                             )}
-
                             {formData.frequency === "monthly" && (
                                 <div className="bg-purple-50 p-4 rounded-lg">
                                     <Label htmlFor="dayOfMonth">Dia do mês</Label>
@@ -220,7 +197,6 @@ export default function NewRoutinePage() {
                                     />
                                 </div>
                             )}
-
                             {formData.frequency === "yearly" && (
                                 <div className="bg-yellow-50 p-4 rounded-lg">
                                     <div className="grid grid-cols-2 gap-4">
@@ -251,7 +227,6 @@ export default function NewRoutinePage() {
                                     </div>
                                 </div>
                             )}
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <Label htmlFor="startDate">Data de início *</Label>
@@ -263,7 +238,6 @@ export default function NewRoutinePage() {
                                         required
                                     />
                                 </div>
-
                                 <div>
                                     <Label htmlFor="endDate">Data de fim (opcional)</Label>
                                     <Input
@@ -277,7 +251,6 @@ export default function NewRoutinePage() {
                                     />
                                 </div>
                             </div>
-
                             <div className="flex gap-4 pt-6 border-t border-gray-200">
                                 <Button
                                     type="submit"
@@ -288,7 +261,6 @@ export default function NewRoutinePage() {
                                 >
                                     {loading ? "Criando..." : "Criar Rotina"}
                                 </Button>
-
                                 <Button
                                     type="button"
                                     onClick={() => router.push("/routines")}

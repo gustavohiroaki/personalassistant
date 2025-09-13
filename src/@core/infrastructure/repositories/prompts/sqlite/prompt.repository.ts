@@ -1,7 +1,6 @@
 import { Prompt } from "@/@core/domain/entities/prompt.entity";
 import { IPromptRepository } from "../prompts.repository.interface";
 import db from "@/@core/infrastructure/database/sqlite-connection";
-
 export class PromptSqliteRepository implements IPromptRepository {
   async create(entity: Prompt): Promise<boolean> {
     await db("prompts").insert(entity);

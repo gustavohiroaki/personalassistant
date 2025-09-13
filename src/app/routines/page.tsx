@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { IRoutineOutput } from "@/@core/domain/entities/routine.entity";
 import Card from "@/components/organisms/Card";
@@ -20,17 +19,14 @@ import {
     CalendarIcon,
     ClockIcon
 } from "@/components/atoms/icons/Icons";
-
 export default function RoutinesPage() {
     const [routines, setRoutines] = useState<IRoutineOutput[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
     useEffect(() => {
         fetchRoutines();
     }, []);
-
     const fetchRoutines = async () => {
         try {
             setLoading(true);
@@ -46,27 +42,22 @@ export default function RoutinesPage() {
             setLoading(false);
         }
     };
-
     const handleDeleteRoutine = async (id: string) => {
         if (!confirm("Tem certeza que deseja excluir esta rotina?")) {
             return;
         }
-
         try {
             const response = await fetch(`/api/routines/${id}`, {
                 method: "DELETE",
             });
-
             if (!response.ok) {
                 throw new Error("Erro ao excluir rotina");
             }
-
             setRoutines(routines.filter((routine) => routine.id !== id));
         } catch (err) {
             setError(err instanceof Error ? err.message : "Erro ao excluir");
         }
     };
-
     const handleToggleActive = async (id: string, currentActive: boolean) => {
         try {
             const response = await fetch(`/api/routines/${id}`, {
@@ -78,11 +69,9 @@ export default function RoutinesPage() {
                     active: !currentActive,
                 }),
             });
-
             if (!response.ok) {
                 throw new Error("Erro ao atualizar rotina");
             }
-
             const updatedRoutine = await response.json();
             setRoutines(
                 routines.map((routine) =>
@@ -93,7 +82,6 @@ export default function RoutinesPage() {
             setError(err instanceof Error ? err.message : "Erro ao atualizar");
         }
     };
-
     const getFrequencyLabel = (frequency: string) => {
         const labels: Record<string, string> = {
             once: "Uma vez",
@@ -105,7 +93,6 @@ export default function RoutinesPage() {
         };
         return labels[frequency] || frequency;
     };
-
     const getFrequencyColor = (frequency: string) => {
         const colors: Record<string, string> = {
             once: "bg-gray-700 text-gray-200",
@@ -117,13 +104,10 @@ export default function RoutinesPage() {
         };
         return colors[frequency] || "bg-gray-700 text-gray-200";
     };
-
     const categories = [...new Set(routines.map(routine => routine.category).filter(Boolean))] as string[];
-
     const filteredRoutines = selectedCategory
         ? routines.filter(routine => routine.category === selectedCategory)
         : routines;
-
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -134,7 +118,6 @@ export default function RoutinesPage() {
             </div>
         );
     }
-
     if (error) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
@@ -152,7 +135,6 @@ export default function RoutinesPage() {
             </div>
         );
     }
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
             <div className="container mx-auto px-4 py-8">
@@ -170,7 +152,6 @@ export default function RoutinesPage() {
                         Nova Rotina
                     </RedirectButton>
                 </div>
-
                 <div className="mb-4 flex flex-wrap gap-2">
                     <button onClick={() => setSelectedCategory(null)} className={`px-3 py-1 rounded-full text-sm ${!selectedCategory ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
                         Todas
@@ -181,7 +162,6 @@ export default function RoutinesPage() {
                         </button>
                     ))}
                 </div>
-
                 {filteredRoutines.length === 0 ? (
                     <div className="text-center py-16">
                         <Card variant="elevated" className="max-w-md mx-auto">
@@ -215,11 +195,9 @@ export default function RoutinesPage() {
                                             {routine.active ? "Ativa" : "Inativa"}
                                         </div>
                                     </div>
-
                                     {routine.description && (
                                         <p className="text-gray-300 text-sm line-clamp-2">{routine.description}</p>
                                     )}
-
                                     <div className="space-y-3">
                                         <div className="flex items-center space-x-2">
                                             <ClockIcon className="w-4 h-4 text-gray-400" />
@@ -227,14 +205,12 @@ export default function RoutinesPage() {
                                                 {getFrequencyLabel(routine.frequency)}
                                             </span>
                                         </div>
-
                                         <div className="flex items-center space-x-2">
                                             <CalendarIcon className="w-4 h-4 text-gray-400" />
                                             <span className="text-sm text-gray-300">
                                                 Início: {new Date(routine.startDate).toLocaleDateString("pt-BR")}
                                             </span>
                                         </div>
-
                                         {routine.endDate && (
                                             <div className="flex items-center space-x-2">
                                                 <CalendarIcon className="w-4 h-4 text-gray-400" />
@@ -244,7 +220,6 @@ export default function RoutinesPage() {
                                             </div>
                                         )}
                                     </div>
-
                                     <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-700">
                                         <RedirectButton
                                             href={`/routines/edit/${routine.id}`}
@@ -254,7 +229,6 @@ export default function RoutinesPage() {
                                         >
                                             <EditIcon />
                                         </RedirectButton>
-
                                         <Button
                                             onClick={() =>
                                                 handleToggleActive(routine.id, routine.active)
@@ -265,7 +239,6 @@ export default function RoutinesPage() {
                                         >
                                             {routine.active ? <ToggleOffIcon /> : <ToggleOnIcon />}
                                         </Button>
-
                                         <Button
                                             onClick={() => handleDeleteRoutine(routine.id)}
                                             variant="danger"

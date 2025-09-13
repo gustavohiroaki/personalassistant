@@ -1,12 +1,10 @@
 "use client";
-
 import { useState, useEffect, useCallback } from "react";
 import Card from "@/components/organisms/Card";
 import Button from "@/components/atoms/buttons/Button";
 import Loading from "@/components/atoms/Loading";
 import Input from "@/components/atoms/forms/Input";
 import Label from "@/components/atoms/forms/Label";
-
 interface Activity {
     id?: string;
     type: "task" | "routine" | "break" | "suggestion";
@@ -16,12 +14,10 @@ interface Activity {
     estimatedDuration: number;
     category?: string;
 }
-
 interface HourlyPlan {
     timeSlot: string;
     activities: Activity[];
 }
-
 interface DaySuggestion {
     date: string;
     summary: {
@@ -34,7 +30,6 @@ interface DaySuggestion {
     tips: string[];
     motivationalMessage: string;
 }
-
 interface UserPreferences {
     workStartTime: string;
     workEndTime: string;
@@ -44,7 +39,6 @@ interface UserPreferences {
     currentEnergy: number;
     availableTime: number;
 }
-
 export default function DaySuggestionsPage() {
     const [suggestions, setSuggestions] = useState<DaySuggestion | null>(null);
     const [loading, setLoading] = useState(false);
@@ -62,11 +56,9 @@ export default function DaySuggestionsPage() {
         currentEnergy: 7,
         availableTime: 8,
     });
-
     const fetchSuggestions = useCallback(async () => {
         setLoading(true);
         setError(null);
-
         try {
             const params = new URLSearchParams({
                 date: selectedDate,
@@ -78,13 +70,10 @@ export default function DaySuggestionsPage() {
                 currentEnergy: preferences.currentEnergy.toString(),
                 availableTime: preferences.availableTime.toString(),
             });
-
             const response = await fetch(`/api/ai/suggest-tasks?${params}`);
-
             if (!response.ok) {
                 throw new Error("Erro ao buscar sugestões");
             }
-
             const data = await response.json();
             setSuggestions(data);
         } catch (err) {
@@ -93,11 +82,9 @@ export default function DaySuggestionsPage() {
             setLoading(false);
         }
     }, [selectedDate, preferences]);
-
     const refreshSuggestions = async () => {
         setLoading(true);
         setError(null);
-
         try {
             const response = await fetch("/api/ai/suggest-tasks", {
                 method: "POST",
@@ -115,11 +102,9 @@ export default function DaySuggestionsPage() {
                     availableTime: preferences.availableTime,
                 }),
             });
-
             if (!response.ok) {
                 throw new Error("Erro ao buscar sugestões");
             }
-
             const data = await response.json();
             setSuggestions(data);
         } catch (err) {
@@ -128,11 +113,9 @@ export default function DaySuggestionsPage() {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchSuggestions();
     }, [fetchSuggestions]);
-
     const getActivityIcon = (type: Activity["type"]) => {
         switch (type) {
             case "task":
@@ -147,7 +130,6 @@ export default function DaySuggestionsPage() {
                 return "📝";
         }
     };
-
     const getPriorityColor = (priority?: string) => {
         switch (priority) {
             case "high":
@@ -160,7 +142,6 @@ export default function DaySuggestionsPage() {
                 return "border-l-gray-500 bg-gray-800 bg-opacity-50";
         }
     };
-
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("pt-BR", {
             weekday: "long",
@@ -169,11 +150,10 @@ export default function DaySuggestionsPage() {
             day: "numeric",
         });
     };
-
     return (
         <div className="min-h-screen bg-gray-900 p-4">
             <div className="max-w-6xl mx-auto">
-                {/* Header */}
+                {}
                 <div className="mb-6">
                     <h1 className="text-3xl font-bold text-white mb-2">
                         Sugestões do Dia
@@ -182,8 +162,7 @@ export default function DaySuggestionsPage() {
                         Otimize sua produtividade com um plano personalizado
                     </p>
                 </div>
-
-                {/* Controls */}
+                {}
                 <Card className="mb-6">
                     <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center gap-2">
@@ -196,26 +175,22 @@ export default function DaySuggestionsPage() {
                                 className="w-auto"
                             />
                         </div>
-
                         <Button onClick={fetchSuggestions} disabled={loading}>
                             {loading ? "Carregando..." : "Gerar Sugestões"}
                         </Button>
-
                         <Button
                             variant="secondary"
                             onClick={() => setShowPreferences(!showPreferences)}
                         >
                             Preferências
                         </Button>
-
                         {suggestions && (
                             <Button variant="outline" onClick={refreshSuggestions} disabled={loading}>
                                 Atualizar
                             </Button>
                         )}
                     </div>
-
-                    {/* Preferences Panel */}
+                    {}
                     {showPreferences && (
                         <div className="mt-4 pt-4 border-t border-gray-600">
                             <h3 className="text-lg font-semibold mb-3 text-white">Configurações do Dia</h3>
@@ -327,8 +302,7 @@ export default function DaySuggestionsPage() {
                         </div>
                     )}
                 </Card>
-
-                {/* Error State */}
+                {}
                 {error && (
                     <Card className="mb-6 border-red-600 bg-red-900">
                         <div className="text-red-300">
@@ -337,24 +311,21 @@ export default function DaySuggestionsPage() {
                         </div>
                     </Card>
                 )}
-
-                {/* Loading State */}
+                {}
                 {loading && (
                     <Card className="text-center py-8">
                         <Loading />
                         <p className="mt-2 text-gray-300">Gerando sugestões personalizadas...</p>
                     </Card>
                 )}
-
-                {/* Results */}
+                {}
                 {suggestions && !loading && (
                     <div className="space-y-6">
-                        {/* Summary */}
+                        {}
                         <Card>
                             <h2 className="text-xl font-bold mb-4 text-white">
                                 {formatDate(suggestions.date)}
                             </h2>
-
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                 <div className="text-center p-3 bg-blue-900 rounded-lg border border-blue-800">
                                     <div className="text-2xl font-bold text-blue-300">
@@ -381,8 +352,7 @@ export default function DaySuggestionsPage() {
                                     <div className="text-sm text-purple-400">Horas Estimadas</div>
                                 </div>
                             </div>
-
-                            {/* Motivational Message */}
+                            {}
                             <div className="bg-gradient-to-r from-blue-900 to-purple-900 p-4 rounded-lg border border-blue-800">
                                 <div className="flex items-center gap-2 mb-2">
                                     <span className="text-2xl">💪</span>
@@ -391,8 +361,7 @@ export default function DaySuggestionsPage() {
                                 <p className="text-gray-300">{suggestions.motivationalMessage}</p>
                             </div>
                         </Card>
-
-                        {/* Tips */}
+                        {}
                         <Card>
                             <h3 className="text-lg font-semibold mb-3 text-white">💡 Dicas para Hoje</h3>
                             <ul className="space-y-2">
@@ -404,8 +373,7 @@ export default function DaySuggestionsPage() {
                                 ))}
                             </ul>
                         </Card>
-
-                        {/* Hourly Plan */}
+                        {}
                         <div>
                             <h3 className="text-xl font-bold mb-4 text-white">📅 Cronograma do Dia</h3>
                             <div className="space-y-3">
@@ -419,7 +387,6 @@ export default function DaySuggestionsPage() {
                                                 {slot.activities.length} atividade(s)
                                             </span>
                                         </div>
-
                                         <div className="space-y-2">
                                             {slot.activities.map((activity, actIndex) => (
                                                 <div
@@ -474,8 +441,7 @@ export default function DaySuggestionsPage() {
                         </div>
                     </div>
                 )}
-
-                {/* Empty State */}
+                {}
                 {!suggestions && !loading && !error && (
                     <Card className="text-center py-8">
                         <div className="text-gray-400 mb-4">

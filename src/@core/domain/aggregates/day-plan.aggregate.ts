@@ -1,67 +1,55 @@
 import { Task } from "../entities/task.entity";
 import { Routine } from "../entities/routine.entity";
-
 export interface IHourlyPlan {
   hour: string;
   activities: Array<{
     type: "task" | "routine" | "break" | "suggestion";
     title: string;
     description?: string;
-    duration?: number; // em minutos
+    duration?: number; 
     priority?: "low" | "medium" | "high";
   }>;
 }
-
 export interface IDayPlanSuggestion {
   date: string;
   totalTasks: number;
   totalRoutines: number;
   hourlyPlan: IHourlyPlan[];
 }
-
 export class DayPlan {
   private date: Date;
   private tasks: Task[];
   private routines: Routine[];
-
   constructor(date: Date, tasks: Task[] = [], routines: Routine[] = []) {
     this.date = date;
     this.tasks = tasks;
     this.routines = routines;
   }
-
   addTask(task: Task): void {
     if (!this.tasks.find((t) => t.id === task.id)) {
       this.tasks.push(task);
     }
   }
-
   addRoutine(routine: Routine): void {
     if (!this.routines.find((r) => r.id === routine.id)) {
       this.routines.push(routine);
     }
   }
-
   addTasks(tasks: Task[]): void {
     tasks.forEach((task) => this.addTask(task));
   }
-
   addRoutines(routines: Routine[]): void {
     routines.forEach((routine) => this.addRoutine(routine));
   }
-
   getTasks(): Task[] {
     return this.tasks;
   }
-
   getRoutines(): Routine[] {
     return this.routines;
   }
-
   getDate(): Date {
     return this.date;
   }
-
   generatePromptForAI(): string {
     const taskList = this.tasks.map((task) => ({
       title: task.title,
@@ -70,27 +58,21 @@ export class DayPlan {
       dueDate: task.dueDate.toISOString(),
       completed: task.completed,
     }));
-
     const routineList = this.routines.map((routine) => ({
       title: routine.title,
       description: routine.description,
       frequency: routine.frequency,
       active: routine.active,
     }));
-
     return `Organize um plano detalhado para o dia ${this.date.toLocaleDateString(
       "pt-BR"
     )}.
-
 Tenho as seguintes tarefas pendentes:
 ${JSON.stringify(taskList, null, 2)}
-
 E as seguintes rotinas ativas:
 ${JSON.stringify(routineList, null, 2)}
-
 Por favor, organize um cronograma hora a hora das 06:00 às 23:00, distribuindo as tarefas e rotinas de forma equilibrada. 
 Inclua pausas e sugestões de atividades quando necessário.
-
 Responda APENAS com um JSON válido seguindo esta estrutura:
 {
   "date": "${this.date.toISOString()}",
@@ -112,7 +94,6 @@ Responda APENAS com um JSON válido seguindo esta estrutura:
   ]
 }`;
   }
-
   createSuggestionFromAIResponse(aiResponse: string): IDayPlanSuggestion {
     try {
       const parsed = JSON.parse(aiResponse);
@@ -123,22 +104,17 @@ Responda APENAS com um JSON válido seguindo esta estrutura:
         hourlyPlan: parsed.hourlyPlan || [],
       };
     } catch {
-      // Fallback caso a IA retorne algo inválido
       return this.generateBasicPlan();
     }
   }
-
   private generateBasicPlan(): IDayPlanSuggestion {
     const hourlyPlan: IHourlyPlan[] = [];
     let currentHour = 6;
     let taskIndex = 0;
     let routineIndex = 0;
-
     while (currentHour <= 23) {
       const hour = `${currentHour.toString().padStart(2, "0")}:00`;
       const activities: IHourlyPlan["activities"] = [];
-
-      // Adicionar rotinas de manhã
       if (
         currentHour >= 6 &&
         currentHour <= 9 &&
@@ -153,7 +129,6 @@ Responda APENAS com um JSON válido seguindo esta estrutura:
         });
         routineIndex++;
       }
-      // Adicionar tarefas durante o dia
       else if (
         currentHour >= 9 &&
         currentHour <= 18 &&
@@ -169,7 +144,6 @@ Responda APENAS com um JSON válido seguindo esta estrutura:
         });
         taskIndex++;
       }
-      // Sugestões de pausa
       else if (currentHour === 12) {
         activities.push({
           type: "break",
@@ -192,11 +166,9 @@ Responda APENAS com um JSON válido seguindo esta estrutura:
           duration: 60,
         });
       }
-
       hourlyPlan.push({ hour, activities });
       currentHour++;
     }
-
     return {
       date: this.date.toISOString(),
       totalTasks: this.tasks.length,

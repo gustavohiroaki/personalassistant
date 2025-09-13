@@ -1,14 +1,11 @@
 import Markdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
-
 import 'highlight.js/styles/github-dark.css';
-
 interface MarkdownRendererProps {
     content: string;
     className?: string;
 }
-
 export default function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
     return (
         <div className={`prose prose-invert prose-lg max-w-full max-h-full ${className}`}>

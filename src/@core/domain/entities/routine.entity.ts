@@ -1,6 +1,5 @@
 import { randomUUID } from "crypto";
 import { Entity } from "./entity";
-
 type TRoutineFrequency =
   | "once"
   | "daily"
@@ -8,7 +7,6 @@ type TRoutineFrequency =
   | "monthly"
   | "yearly"
   | "custom";
-
 export interface IRoutineInput {
   title: string;
   description?: string;
@@ -18,13 +16,12 @@ export interface IRoutineInput {
   endDate?: Date;
   active?: boolean;
   daysOfWeek?: number[];
-  dayOfMonth?: number; // Para monthly: dia do mês (1-31)
-  daysOfMonth?: number[]; // Para monthly múltiplos dias
-  month?: number; // Para yearly: mês (1-12)
-  dayOfYear?: number; // Para yearly: dia do ano (1-366)
-  customRule?: string; // Para custom: expressão cron ou JSON
+  dayOfMonth?: number; 
+  daysOfMonth?: number[]; 
+  month?: number; 
+  dayOfYear?: number; 
+  customRule?: string; 
 }
-
 export interface IRoutineOutput {
   id: string;
   createdAt: string;
@@ -43,7 +40,6 @@ export interface IRoutineOutput {
   dayOfYear?: number;
   customRule?: string;
 }
-
 export class Routine extends Entity {
   id: string;
   createdAt: Date;
@@ -61,7 +57,6 @@ export class Routine extends Entity {
   month?: number;
   dayOfYear?: number;
   customRule?: string;
-
   constructor(input: IRoutineInput) {
     super();
     this.id = randomUUID();
@@ -80,7 +75,6 @@ export class Routine extends Entity {
     this.dayOfYear = input.dayOfYear;
     this.customRule = input.customRule;
   }
-
   toJSON(): IRoutineOutput {
     return {
       id: this.id,
@@ -101,7 +95,6 @@ export class Routine extends Entity {
       customRule: this.customRule,
     };
   }
-
   static fromJSON(json: IRoutineOutput): Routine {
     const routine = new Routine({
       title: json.title,
@@ -123,17 +116,14 @@ export class Routine extends Entity {
     routine.updatedAt = json.updatedAt ? new Date(json.updatedAt) : undefined;
     return routine;
   }
-
   activate(): void {
     this.active = true;
     this.updatedAt = new Date();
   }
-
   deactivate(): void {
     this.active = false;
     this.updatedAt = new Date();
   }
-
   setFrequency(
     frequency: TRoutineFrequency,
     options?: {
@@ -146,14 +136,12 @@ export class Routine extends Entity {
     }
   ): void {
     this.frequency = frequency;
-
     this.daysOfWeek = undefined;
     this.dayOfMonth = undefined;
     this.daysOfMonth = undefined;
     this.month = undefined;
     this.dayOfYear = undefined;
     this.customRule = undefined;
-
     if (options) {
       this.daysOfWeek = options.daysOfWeek;
       this.dayOfMonth = options.dayOfMonth;
@@ -162,10 +150,8 @@ export class Routine extends Entity {
       this.dayOfYear = options.dayOfYear;
       this.customRule = options.customRule;
     }
-
     this.updatedAt = new Date();
   }
-
   isActive(): boolean {
     const now = new Date();
     return (
@@ -174,7 +160,6 @@ export class Routine extends Entity {
       (!this.endDate || now <= this.endDate)
     );
   }
-
   validateFrequencyConfiguration(): boolean {
     switch (this.frequency) {
       case "daily":

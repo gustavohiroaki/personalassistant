@@ -1,10 +1,8 @@
 import { build } from "@/utils/tailwind-translator";
 import { SelectHTMLAttributes } from "react"
-
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
     options: { value: string; label: string }[];
 }
-
 export default function Select({ options, ...props }: SelectProps) {
     const classes = build([
         'px-3',

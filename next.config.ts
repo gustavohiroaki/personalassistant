@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
-
 const nextConfig: NextConfig = {
   webpack: (config, { isServer }) => {
     config.externals = config.externals || [];
-
     if (isServer) {
       config.externals.push({
         mysql: "commonjs mysql",
@@ -26,7 +24,6 @@ const nextConfig: NextConfig = {
         oracledb: false,
       };
     }
-
     return config;
   },
   experimental: {
@@ -43,5 +40,4 @@ const nextConfig: NextConfig = {
     },
   },
 };
-
 export default nextConfig;

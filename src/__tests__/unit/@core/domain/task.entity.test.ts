@@ -1,5 +1,4 @@
 import { Task } from "@/@core/domain/entities/task.entity";
-
 describe("Task Entity", () => {
   it("should create a new task", () => {
     const task = new Task({
@@ -11,7 +10,6 @@ describe("Task Entity", () => {
     expect(task).toBeInstanceOf(Task);
     expect(task.title).toBe("New Task");
   });
-
   it("should create a task from JSON", () => {
     const json = {
       id: "1",
@@ -26,7 +24,6 @@ describe("Task Entity", () => {
     expect(task).toBeInstanceOf(Task);
     expect(task.id).toBe("1");
   });
-
   it("should generate json from task", () => {
     const task = new Task({
       title: "New Task",

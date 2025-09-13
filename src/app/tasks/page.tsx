@@ -1,9 +1,7 @@
 import { ITask } from "@/entities/ITask";
 import TasksPanel from "@/components/templates/TasksPanel";
-
 export default async function TaskList() {
     let tasks: ITask[] = [];
-
     try {
         const response = await fetch(`${process.env.API_URL}/api/tasks`, { method: 'GET' });
         if (!response.ok) {
@@ -13,7 +11,6 @@ export default async function TaskList() {
     } catch (error) {
         console.error("Error fetching tasks:", error);
     }
-
     return (
         <TasksPanel initialTasks={tasks} />
     );

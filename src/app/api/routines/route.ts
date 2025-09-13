@@ -1,14 +1,11 @@
 import { IRoutineInput } from "@/@core/domain/entities/routine.entity";
 import makeCreateRoutineUseCase from "@/@core/application/usecases/routines/factories/create.routine.factory";
 import makeFindAllRoutinesUseCase from "@/@core/application/usecases/routines/factories/find-all.routine.factory";
-
 export async function POST(req: Request) {
   const body = (await req.json()) as IRoutineInput;
-
   if (!body.title || !body.frequency || !body.startDate) {
     return new Response("Missing required fields", { status: 400 });
   }
-
   const routine: IRoutineInput = {
     title: body.title,
     description: body.description,
@@ -30,7 +27,6 @@ export async function POST(req: Request) {
     dayOfYear: body.dayOfYear,
     customRule: body.customRule,
   };
-
   try {
     await makeCreateRoutineUseCase().execute(routine);
     return new Response("Routine created successfully", { status: 201 });
@@ -41,7 +37,6 @@ export async function POST(req: Request) {
     return new Response(message, { status: 500 });
   }
 }
-
 export async function GET() {
   try {
     const routines = await makeFindAllRoutinesUseCase().execute();

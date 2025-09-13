@@ -4,7 +4,6 @@ import { TaskSqliteRepository } from "@/@core/infrastructure/repositories/tasks/
 import RoutineSqliteRepository from "@/@core/infrastructure/repositories/routines/sqlite/routine.repository";
 import { PromptSqliteRepository } from "@/@core/infrastructure/repositories/prompts/sqlite/prompt.repository";
 import { OpenAIClient } from "@/@core/infrastructure/clients/openai/client.openai";
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -16,24 +15,16 @@ export async function GET(request: NextRequest) {
     const focusAreas = searchParams.get("focusAreas")?.split(",") || [];
     const currentEnergy = parseInt(searchParams.get("currentEnergy") || "7");
     const availableTime = parseInt(searchParams.get("availableTime") || "8");
-
-    // Se não foi fornecida uma data, usar hoje
     const targetDate = dateParam ? new Date(dateParam) : new Date();
-    
-    // Validar se a data é válida
     if (isNaN(targetDate.getTime())) {
       return NextResponse.json(
         { error: "Data inválida fornecida" },
         { status: 400 }
       );
     }
-
-    // Inicializar repositórios
     const taskRepository = new TaskSqliteRepository();
     const routineRepository = new RoutineSqliteRepository();
     const promptRepository = new PromptSqliteRepository();
-    
-    // Inicializar cliente de IA
     const openaiApiKey = process.env.OPENAI_API_KEY;
     if (!openaiApiKey) {
       return NextResponse.json(
@@ -41,20 +32,16 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       );
     }
-
     const aiClient = new OpenAIClient(
       openaiApiKey,
       process.env.OPENAI_MODEL || "gpt-5"
     );
-
-    // Criar e executar caso de uso
     const suggestDailyTasksUseCase = new SuggestDailyTasksUseCase(
       taskRepository,
       routineRepository,
       promptRepository,
       aiClient
     );
-
     const result = await suggestDailyTasksUseCase.execute({
       targetDate,
       workStartTime,
@@ -65,7 +52,6 @@ export async function GET(request: NextRequest) {
       currentEnergy,
       availableTime,
     });
-
     return NextResponse.json(result);
   } catch (error) {
     console.error("Erro ao gerar sugestões de tarefas:", error);
@@ -78,7 +64,6 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -92,24 +77,16 @@ export async function POST(request: NextRequest) {
       currentEnergy = 7,
       availableTime = 8
     } = body;
-
-    // Se não foi fornecida uma data, usar hoje
     const targetDate = dateParam ? new Date(dateParam) : new Date();
-    
-    // Validar se a data é válida
     if (isNaN(targetDate.getTime())) {
       return NextResponse.json(
         { error: "Data inválida fornecida" },
         { status: 400 }
       );
     }
-
-    // Inicializar repositórios
     const taskRepository = new TaskSqliteRepository();
     const routineRepository = new RoutineSqliteRepository();
     const promptRepository = new PromptSqliteRepository();
-    
-    // Inicializar cliente de IA
     const openaiApiKey = process.env.OPENAI_API_KEY;
     if (!openaiApiKey) {
       return NextResponse.json(
@@ -117,20 +94,16 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
     const aiClient = new OpenAIClient(
       openaiApiKey,
       process.env.OPENAI_MODEL || "gpt-5"
     );
-
-    // Criar e executar caso de uso
     const suggestDailyTasksUseCase = new SuggestDailyTasksUseCase(
       taskRepository,
       routineRepository,
       promptRepository,
       aiClient
     );
-
     const result = await suggestDailyTasksUseCase.execute({
       targetDate,
       workStartTime,
@@ -141,7 +114,6 @@ export async function POST(request: NextRequest) {
       currentEnergy,
       availableTime,
     });
-
     return NextResponse.json(result);
   } catch (error) {
     console.error("Erro ao gerar sugestões de tarefas:", error);

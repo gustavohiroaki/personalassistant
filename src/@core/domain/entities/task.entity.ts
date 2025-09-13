@@ -1,14 +1,12 @@
 import { Entity } from "./entity";
-
 export interface ITaskInput {
   title: string;
   description: string;
   dueDate: Date;
   priority: "low" | "medium" | "high";
   completed?: boolean;
-  category?: string; // Categoria da tarefa (ex: "trabalho", "pessoal", "estudos")
+  category?: string; 
 }
-
 export interface ITaskOutput {
   id: string;
   createdAt: string;
@@ -20,7 +18,6 @@ export interface ITaskOutput {
   completed: boolean;
   category?: string;
 }
-
 export class Task extends Entity {
   id: string;
   createdAt: Date;
@@ -31,7 +28,6 @@ export class Task extends Entity {
   priority: "low" | "medium" | "high";
   completed: boolean;
   category?: string;
-
   constructor(input: ITaskInput) {
     super();
     this.id = crypto.randomUUID();
@@ -43,7 +39,6 @@ export class Task extends Entity {
     this.completed = input.completed ?? false;
     this.category = input.category;
   }
-
   toJSON(): ITaskOutput {
     return {
       id: this.id,
@@ -57,7 +52,6 @@ export class Task extends Entity {
       category: this.category,
     };
   }
-
   static fromJSON(json: ITaskOutput): Task {
     const task = new Task({
       title: json.title,

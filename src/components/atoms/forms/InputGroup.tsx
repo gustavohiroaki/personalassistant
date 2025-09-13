@@ -1,16 +1,13 @@
 import { build } from "@/utils/tailwind-translator";
 import { HTMLAttributes } from "react"
-
 interface LabelProps {
     htmlFor: string;
     text: string;
 }
-
 interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     label?: LabelProps;
 }
-
 export default function InputGroup({ label, children }: InputGroupProps) {
     const inputGroupClasses = build([
         'flex',
