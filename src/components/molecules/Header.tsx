@@ -14,7 +14,7 @@ export default function Header() {
                 <Link href="/routines" className="text-white hover:text-gray-300 transition-colors">
                     Rotinas
                 </Link>
-                <RedirectButton variant="outline" href="/config">Config</RedirectButton>
+                
             </nav>
         </header>
     )

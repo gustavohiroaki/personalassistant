@@ -34,8 +34,8 @@ export default function Home() {
           </div>
         </GridContainer>
         <div className="mt-8 text-center">
-          <RedirectButton href="/day" variant="primary" size="lg" icon={<CalendarIcon />}>
-            Planejar Meu Dia
+          <RedirectButton href="/suggestions" variant="primary" size="lg" icon={<CalendarIcon />}>
+            Sugestão do Dia
           </RedirectButton>
         </div>
       </CenteredContainer>
