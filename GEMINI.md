@@ -30,6 +30,6 @@ O projeto é construído com uma arquitetura moderna e robusta, separando claram
 - **`src/components`:** Componentes React reutilizáveis, organizados seguindo uma abordagem de Atomic Design (`atoms`, `molecules`, `organisms`).
 - **`src/@core`:** O coração da aplicação, onde a lógica de negócio reside. É dividido em:
   - **`domain`:** Contém as entidades de negócio (`Task`, `Routine`), agregados e as interfaces dos repositórios. É a camada mais interna e pura da aplicação.
-  - **`application`:** Orquestra o fluxo de dados e executa os casos de uso (use cases), como `GenerateDayPlanUseCase` ou `CreateTaskUseCase`.
+  - **`application`:** Orquestra o fluxo de dados e executa os casos de uso (use cases), como `SuggestDailyTasksUseCase` ou `CreateTaskUseCase`.
   - **`infrastructure`:** Implementações concretas das interfaces definidas no domínio. Aqui encontramos o cliente da OpenAI (`client.openai.ts`) e as implementações dos repositórios para SQLite.
 - **`src/__tests__`:** Testes unitários para as entidades de domínio e a lógica da aplicação.
