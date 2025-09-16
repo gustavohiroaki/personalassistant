@@ -33,6 +33,7 @@ export class UpdateRoutineUseCase
       month: updates.month ?? existingRoutine.month,
       dayOfYear: updates.dayOfYear ?? existingRoutine.dayOfYear,
       customRule: updates.customRule ?? existingRoutine.customRule,
+      priority: updates.priority ?? existingRoutine.priority,
     };
     const updatedRoutine = new Routine(updatedData);
     updatedRoutine.id = id;

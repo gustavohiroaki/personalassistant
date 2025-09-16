@@ -12,10 +12,12 @@ Configure os seguintes secrets no seu repositório GitHub:
 2. Adicione os seguintes secrets:
 
 #### `DOCKERHUB_USERNAME`
+
 - **Valor**: Seu nome de usuário do DockerHub
 - **Exemplo**: `seunome`
 
 #### `DOCKERHUB_TOKEN`
+
 - **Valor**: Token de acesso do DockerHub
 - **Como obter**:
   1. Faça login no [DockerHub](https://hub.docker.com)
@@ -28,12 +30,14 @@ Configure os seguintes secrets no seu repositório GitHub:
 ### 2. Como o Workflow Funciona
 
 #### Triggers (Quando executa):
+
 - ✅ **Push para `main`**: Build e push para DockerHub
-- ✅ **Push para `develop`**: Build e push para DockerHub  
+- ✅ **Push para `develop`**: Build e push para DockerHub
 - ✅ **Tags `v*`**: Build e push com tag da versão
 - ✅ **Pull Requests**: Apenas build (não faz push)
 
 #### Tags geradas automaticamente:
+
 - `latest` - sempre a versão mais recente da branch main
 - `main` - última versão da branch main
 - `develop` - última versão da branch develop
@@ -41,12 +45,13 @@ Configure os seguintes secrets no seu repositório GitHub:
 - `pr-123` - para pull requests
 
 #### Exemplos de imagens geradas:
+
 ```bash
 # Branch main
 seunome/personalassistant:latest
 seunome/personalassistant:main
 
-# Branch develop  
+# Branch develop
 seunome/personalassistant:develop
 
 # Tag de versão
@@ -72,6 +77,7 @@ docker run -p 3000:3000 seunome/personalassistant:v1.0.0
 ### 4. Status do Build
 
 O status do build aparecerá:
+
 - ✅ Na aba `Actions` do GitHub
 - ✅ No README se adicionar badge
 - ✅ Nos commits como check
@@ -87,13 +93,16 @@ O status do build aparecerá:
 ## 🐛 Troubleshooting
 
 ### Erro: "authentication required"
+
 - ✅ Verifique se os secrets `DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN` estão configurados corretamente
 
 ### Erro: "repository does not exist"
+
 - ✅ Certifique-se que o repositório existe no DockerHub
 - ✅ Verifique se o nome de usuário está correto
 
 ### Build falha
+
 - ✅ Teste o build localmente: `docker build -t test .`
 - ✅ Verifique se todos os arquivos necessários estão commitados
 

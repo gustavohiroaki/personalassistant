@@ -5,18 +5,21 @@ Este projeto inclui automação completa de CI/CD com GitHub Actions e DockerHub
 ## 📋 Workflows Configurados
 
 ### 1. 🏗️ Build e Push Docker (`docker-build-push.yml`)
+
 - **Trigger**: Push para `main`/`develop`, Tags `v*`, Pull Requests
 - **Funcionalidade**: Build da aplicação e push para DockerHub
 - **Plataformas**: `linux/amd64`, `linux/arm64`
 - **Cache**: Otimizado com GitHub Actions Cache
 
 ### 2. 🧪 CI Tests (`ci.yml`)
+
 - **Trigger**: Push e Pull Requests
 - **Funcionalidade**: Testes, lint e build
 - **Node.js**: Versões 18.x e 20.x
 - **Docker**: Teste de build local
 
 ### 3. 🎯 Release (`release.yml`)
+
 - **Trigger**: Tags `v*`
 - **Funcionalidade**: Release automático + Docker push
 - **Changelog**: Geração automática
@@ -44,6 +47,7 @@ DOCKERHUB_TOKEN=seu_token_aqui
 ## 🎮 Como Usar
 
 ### Desenvolvimento
+
 ```bash
 # Build local
 docker build -t personalassistant .
@@ -57,6 +61,7 @@ npm run lint
 ```
 
 ### Release Automático
+
 ```bash
 # Usando o script
 ./scripts/release.sh patch   # 1.0.0 → 1.0.1
@@ -69,6 +74,7 @@ git push origin v1.0.1
 ```
 
 ### Pull da Imagem Docker
+
 ```bash
 # Última versão
 docker pull seuusuario/personalassistant:latest
@@ -82,23 +88,26 @@ docker pull seuusuario/personalassistant:develop
 
 ## 📊 Tags Geradas
 
-| Trigger | Tag | Exemplo |
-|---------|-----|---------|
-| Push `main` | `latest`, `main` | `latest` |
-| Push `develop` | `develop` | `develop` |
-| Tag `v1.0.1` | `v1.0.1`, `1.0`, `latest` | `v1.0.1` |
-| PR #123 | `pr-123` | `pr-123` |
+| Trigger        | Tag                       | Exemplo   |
+| -------------- | ------------------------- | --------- |
+| Push `main`    | `latest`, `main`          | `latest`  |
+| Push `develop` | `develop`                 | `develop` |
+| Tag `v1.0.1`   | `v1.0.1`, `1.0`, `latest` | `v1.0.1`  |
+| PR #123        | `pr-123`                  | `pr-123`  |
 
 ## 🔧 Troubleshooting
 
 ### ❌ "authentication required"
+
 - Verifique `DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN`
 
 ### ❌ "repository does not exist"
+
 - Crie o repositório no DockerHub primeiro
 - Verifique o nome do usuário
 
 ### ❌ Build falha
+
 ```bash
 # Teste local
 docker build -t test .

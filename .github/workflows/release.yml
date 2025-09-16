@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 permissions:
   contents: write
@@ -12,64 +12,64 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Log in to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Extract version
-      id: version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}
-          ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-        platforms: linux/amd64,linux/arm64
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
 
-    - name: Generate changelog
-      id: changelog
-      run: |
-        # Gerar changelog básico
-        echo "## Changelog" > CHANGELOG.md
-        echo "" >> CHANGELOG.md
-        git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 HEAD~1)..HEAD >> CHANGELOG.md
-        echo "" >> CHANGELOG.md
-        echo "## Docker Image" >> CHANGELOG.md
-        echo "\`\`\`bash" >> CHANGELOG.md
-        echo "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}" >> CHANGELOG.md
-        echo "\`\`\`" >> CHANGELOG.md
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Gerar changelog básico
+          echo "## Changelog" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 HEAD~1)..HEAD >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "## Docker Image" >> CHANGELOG.md
+          echo "\`\`\`bash" >> CHANGELOG.md
+          echo "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}" >> CHANGELOG.md
+          echo "\`\`\`" >> CHANGELOG.md
 
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.version.outputs.VERSION }}
-        release_name: Release ${{ steps.version.outputs.VERSION }}
-        body_path: CHANGELOG.md
-        draft: false
-        prerelease: false
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          release_name: Release ${{ steps.version.outputs.VERSION }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
 
-    - name: Notify success
-      run: |
-        echo "🚀 Release ${{ steps.version.outputs.VERSION }} created successfully!"
-        echo "📦 Docker image: ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}"
+      - name: Notify success
+        run: |
+          echo "🚀 Release ${{ steps.version.outputs.VERSION }} created successfully!"
+          echo "📦 Docker image: ${{ secrets.DOCKERHUB_USERNAME }}/personalassistant:${{ steps.version.outputs.VERSION }}"

@@ -21,6 +21,6 @@ export interface ITaskUpdate {
   description?: string;
   dueDate?: Date;
   priority?: "low" | "medium" | "high";
-  category: string;
+  category?: string;
   completed?: boolean;
 }

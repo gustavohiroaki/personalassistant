@@ -3,7 +3,8 @@ export abstract class Entity {
   abstract createdAt: Date;
   abstract updatedAt?: Date;
   abstract toJSON(): object;
-  static fromJSON(json: object): Entity {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static fromJSON(_json: object): Entity {
     throw new Error("fromJSON must be implemented in the derived class");
   }
 }
