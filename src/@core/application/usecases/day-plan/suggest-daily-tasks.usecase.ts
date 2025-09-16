@@ -274,7 +274,32 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
     prompt += `\n\nCONFIGURAÇÕES ADICIONAIS:\n- Áreas de foco: ${focusAreas.join(", ") || "Nenhuma específica"}\n- Energia atual: ${currentEnergy}/10\n- Tempo disponível: ${availableTime} horas\n\nINSTRUÇÕES FINAIS:\n${hasWorkRoutine ? 
   `- OBRIGATÓRIO: Tarefas de trabalho APENAS entre ${workStartTime} e ${workEndTime}\n- OBRIGATÓRIO: Tarefas pessoais APENAS fora do horário ${workStartTime}-${workEndTime}\n- Horário ${wakeUpTime}-${workStartTime}: atividades matinais/preparação\n- Horário ${workEndTime}-${sleepTime}: atividades pessoais/relaxamento` :
   `- Distribua atividades entre ${wakeUpTime} e ${sleepTime}\n- Considere picos de energia ao longo do dia`
-}\n- Inclua pausas estratégicas\n- Forneça dicas específicas e mensagem motivacional\n\nResponda APENAS com um JSON válido seguindo esta estrutura:\n{\n  \"hourlyPlan\": [\n    {\n      \"timeSlot\": \"07:00 - 08:00\",\n      \"activities\": [\n        {\n          \"type\": \"routine|task|break|personal\",\n          \"title\": \"Nome da atividade\",\n          \"description\": \"Descrição detalhada\",\n          \"priority\": \"high|medium|low\",\n          \"estimatedDuration\": 60,\n          \"category\": \"trabalho|pessoal|rotina|pausa\"\n        }\n      ]\n    }\n  ],\n  \"tips\": [\"Dica específica 1\", \"Dica específica 2\"],\n  \"motivationalMessage\": \"Mensagem motivacional personalizada\"\n}`;
+}
+- Analise a 'Descrição' de cada tarefa e rotina para entender o contexto e a complexidade. Use essa informação para decidir se a atividade é viável para o dia e para estimar o tempo necessário.
+- Você não precisa incluir todas as tarefas e rotinas listadas. Selecione as mais relevantes e que se encaixam de forma realista no dia do usuário.
+- Inclua pausas estratégicas
+- Forneça dicas específicas e mensagem motivacional
+
+Responda APENAS com um JSON válido seguindo esta estrutura:
+{
+  "hourlyPlan": [
+    {
+      "timeSlot": "07:00 - 08:00",
+      "activities": [
+        {
+          "type": "routine|task|break|personal",
+          "title": "Nome da atividade",
+          "description": "Descrição detalhada",
+          "priority": "high|medium|low",
+          "estimatedDuration": 60,
+          "category": "trabalho|pessoal|rotina|pausa"
+        }
+      ]
+    }
+  ],
+  "tips": ["Dica específica 1", "Dica específica 2"],
+  "motivationalMessage": "Mensagem motivacional personalizada"
+}`;
     return prompt;
   }
   private getSystemPrompt(): string {

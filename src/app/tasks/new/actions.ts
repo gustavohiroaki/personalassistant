@@ -12,9 +12,9 @@ export default async function create(formData: FormData) {
     dueDate: dueDate ? new Date(dueDate) : new Date(),
     priority: priority as "low" | "medium" | "high",
     completed: false,
-    category: category,
+    category: category || "",
   };
-  await fetch("http:
+  await fetch("http://localhost:3000/api/tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

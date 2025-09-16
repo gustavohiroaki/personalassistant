@@ -12,9 +12,9 @@ export async function edit(formData: FormData, id: string) {
     dueDate: dueDate ? new Date(dueDate) : new Date(),
     priority: priority as "low" | "medium" | "high",
     completed: false,
-    category: category,
+    category: category || "",
   };
-  await fetch(`http:
+  await fetch(`http://localhost:3000/api/tasks/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export async function edit(formData: FormData, id: string) {
   });
 }
 export async function getTask(id: string) {
-  const response = await fetch(`http:
+  const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
     method: "GET",
   });
   if (!response.ok) {

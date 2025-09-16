@@ -4,6 +4,7 @@ export interface ITask {
   description: string;
   dueDate: Date;
   priority: "low" | "medium" | "high";
+  category: string;
   completed: boolean;
   createdAt?: Date;
 }
@@ -12,6 +13,7 @@ export interface ITaskCreate {
   description: string;
   dueDate: Date;
   priority: "low" | "medium" | "high";
+  category: string;
   completed?: boolean;
 }
 export interface ITaskUpdate {
@@ -19,5 +21,6 @@ export interface ITaskUpdate {
   description?: string;
   dueDate?: Date;
   priority?: "low" | "medium" | "high";
+  category: string;
   completed?: boolean;
 }
