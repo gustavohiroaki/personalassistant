@@ -93,6 +93,24 @@ export default function RoutinesPage() {
         };
         return labels[frequency] || frequency;
     };
+
+    const getPriorityLabel = (priority: string) => {
+        const labels: Record<string, string> = {
+            low: "Baixa",
+            medium: "Média",
+            high: "Alta",
+        };
+        return labels[priority] || priority;
+    };
+
+    const getPriorityColor = (priority: string) => {
+        const colors: Record<string, string> = {
+            low: "bg-gray-700 text-gray-200",
+            medium: "bg-yellow-700 text-yellow-200",
+            high: "bg-red-700 text-red-200",
+        };
+        return colors[priority] || "bg-gray-700 text-gray-200";
+    };
     const getFrequencyColor = (frequency: string) => {
         const colors: Record<string, string> = {
             once: "bg-gray-700 text-gray-200",
@@ -203,6 +221,12 @@ export default function RoutinesPage() {
                                             <ClockIcon className="w-4 h-4 text-gray-400" />
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFrequencyColor(routine.frequency)}`}>
                                                 {getFrequencyLabel(routine.frequency)}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="w-4 h-4 text-gray-400">⭐</span>
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(routine.priority || "medium")}`}>
+                                                {getPriorityLabel(routine.priority || "medium")}
                                             </span>
                                         </div>
                                         <div className="flex items-center space-x-2">

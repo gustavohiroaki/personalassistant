@@ -93,6 +93,21 @@ export const migrate = () => {
               }
             }
           );
+          db().instance.run(
+            `ALTER TABLE routines ADD COLUMN priority TEXT DEFAULT 'medium'`,
+            (err) => {
+              if (err) {
+                if (!err.message.includes("duplicate column name")) {
+                  console.error(
+                    "Error adding priority to routines:",
+                    err.message
+                  );
+                }
+              } else {
+                console.log("Priority column added to routines table.");
+              }
+            }
+          );
         }
       }
     );

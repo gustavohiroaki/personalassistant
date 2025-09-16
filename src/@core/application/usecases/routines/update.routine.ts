@@ -19,6 +19,7 @@ class UpdateRoutineUseCase implements IUseCase<UpdateRoutineInput, boolean> {
       title: data.title ?? existingRoutine.title,
       description: data.description ?? existingRoutine.description,
       category: data.category ?? existingRoutine.category,
+      priority: data.priority ?? existingRoutine.priority,
       frequency: data.frequency ?? existingRoutine.frequency,
       startDate: data.startDate ?? existingRoutine.startDate,
       endDate: data.endDate ?? existingRoutine.endDate,

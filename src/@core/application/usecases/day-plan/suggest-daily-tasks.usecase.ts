@@ -109,7 +109,7 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
     const effectiveWorkStart = workStartTime;
     const effectiveWorkEnd = workEndTime;
     const { workTasks, personalTasks } = this.categorizeTasks(relevantTasks);
-    const nonWorkRoutines = activeRoutines; 
+    const { workRoutines, nonWorkRoutines } = this.categorizeRoutines(activeRoutines);
     const userContext = this.buildUserContext(userPrompts);
     const scheduleConfig = {
       hasWorkRoutine,
@@ -119,7 +119,7 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
       sleepTime,
       workTasks,
       personalTasks,
-      workRoutines: [], 
+      workRoutines,
       nonWorkRoutines,
       focusAreas,
       currentEnergy,
@@ -178,6 +178,61 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
     });
     return { workTasks, personalTasks };
   }
+
+  private categorizeRoutines(routines: Routine[]): { workRoutines: Routine[]; nonWorkRoutines: Routine[] } {
+    const workRoutines: Routine[] = [];
+    const nonWorkRoutines: Routine[] = [];
+    
+    routines.forEach(routine => {
+      if (routine.category === 'trabalho') {
+        workRoutines.push(routine);
+      } else {
+        nonWorkRoutines.push(routine);
+      }
+    });
+
+    // Criar um balanceamento inteligente de prioridades
+    const balanceByPriority = (routinesList: Routine[]) => {
+      const high = routinesList.filter(r => r.priority === 'high');
+      const medium = routinesList.filter(r => r.priority === 'medium');
+      const low = routinesList.filter(r => r.priority === 'low');
+      
+      // Intercalar prioridades para garantir diversidade
+      const balanced: Routine[] = [];
+      const maxLength = Math.max(high.length, medium.length, low.length);
+      
+      for (let i = 0; i < maxLength; i++) {
+        if (i < high.length) balanced.push(high[i]);
+        if (i < medium.length) balanced.push(medium[i]);
+        if (i < low.length) balanced.push(low[i]);
+      }
+      
+      return balanced;
+    };
+    
+    return { 
+      workRoutines: balanceByPriority(workRoutines), 
+      nonWorkRoutines: balanceByPriority(nonWorkRoutines) 
+    };
+  }
+
+  private generatePriorityStats(tasks: Task[], routines: Routine[]): string {
+    const allItems = [...tasks, ...routines];
+    const stats = {
+      high: allItems.filter(item => item.priority === 'high').length,
+      medium: allItems.filter(item => item.priority === 'medium').length,
+      low: allItems.filter(item => item.priority === 'low').length
+    };
+    
+    const total = stats.high + stats.medium + stats.low;
+    
+    return `ESTATÍSTICAS DE PRIORIDADE:
+- Alta prioridade: ${stats.high} itens (${total > 0 ? Math.round(stats.high/total*100) : 0}%)
+- Média prioridade: ${stats.medium} itens (${total > 0 ? Math.round(stats.medium/total*100) : 0}%)
+- Baixa prioridade: ${stats.low} itens (${total > 0 ? Math.round(stats.low/total*100) : 0}%)
+- OBJETIVO: Inclua pelo menos 70% das HIGH, 50% das MEDIUM e 30% das LOW`;
+  }
+
   private filterActiveRoutines(routines: Routine[], date: Date): Routine[] {
     return routines.filter(routine => {
       if (!routine.active) return false;
@@ -250,13 +305,13 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
       if (workRoutines.length > 0) {
         prompt += `\n\nROTINAS DE TRABALHO (${workRoutines.length}) - no horário ${workStartTime}-${workEndTime}:`;
         workRoutines.forEach((routine: Routine, idx: number) => {
-          prompt += `\n${idx + 1}. ${routine.title} - ${routine.description || "Sem descrição"}`;
+          prompt += `\n${idx + 1}. [${routine.priority.toUpperCase()}] ${routine.title} - ${routine.description || "Sem descrição"}`;
         });
       }
       if (nonWorkRoutines.length > 0) {
         prompt += `\n\nROTINAS PESSOAIS (${nonWorkRoutines.length}) - FORA do horário ${workStartTime}-${workEndTime}:`;
         nonWorkRoutines.forEach((routine: Routine, idx: number) => {
-          prompt += `\n${idx + 1}. ${routine.title} - ${routine.description || "Sem descrição"}`;
+          prompt += `\n${idx + 1}. [${routine.priority.toUpperCase()}] ${routine.title} - ${routine.description || "Sem descrição"}`;
         });
       }
     } else {
@@ -267,16 +322,26 @@ export class SuggestDailyTasksUseCase implements IUseCase<ISuggestDailyTasksInpu
       if ([...workRoutines, ...nonWorkRoutines].length > 0) {
         prompt += `\n\nROTINAS ATIVAS (${[...workRoutines, ...nonWorkRoutines].length}):`;
         [...workRoutines, ...nonWorkRoutines].forEach((routine, idx) => {
-          prompt += `\n${idx + 1}. ${routine.title} - ${routine.description || "Sem descrição"}`;
+          prompt += `\n${idx + 1}. [${routine.priority.toUpperCase()}] ${routine.title} - ${routine.description || "Sem descrição"}`;
         });
       }
     }
-    prompt += `\n\nCONFIGURAÇÕES ADICIONAIS:\n- Áreas de foco: ${focusAreas.join(", ") || "Nenhuma específica"}\n- Energia atual: ${currentEnergy}/10\n- Tempo disponível: ${availableTime} horas\n\nINSTRUÇÕES FINAIS:\n${hasWorkRoutine ? 
+    
+    const priorityStats = this.generatePriorityStats([...workTasks, ...personalTasks], [...workRoutines, ...nonWorkRoutines]);
+    
+    prompt += `\n\n${priorityStats}\n\nCONFIGURAÇÕES ADICIONAIS:\n- Áreas de foco: ${focusAreas.join(", ") || "Nenhuma específica"}\n- Energia atual: ${currentEnergy}/10\n- Tempo disponível: ${availableTime} horas\n\nINSTRUÇÕES FINAIS:\n${hasWorkRoutine ? 
   `- OBRIGATÓRIO: Tarefas de trabalho APENAS entre ${workStartTime} e ${workEndTime}\n- OBRIGATÓRIO: Tarefas pessoais APENAS fora do horário ${workStartTime}-${workEndTime}\n- Horário ${wakeUpTime}-${workStartTime}: atividades matinais/preparação\n- Horário ${workEndTime}-${sleepTime}: atividades pessoais/relaxamento` :
   `- Distribua atividades entre ${wakeUpTime} e ${sleepTime}\n- Considere picos de energia ao longo do dia`
 }
 - Analise a 'Descrição' de cada tarefa e rotina para entender o contexto e a complexidade. Use essa informação para decidir se a atividade é viável para o dia e para estimar o tempo necessário.
-- Você não precisa incluir todas as tarefas e rotinas listadas. Selecione as mais relevantes e que se encaixam de forma realista no dia do usuário.
+- PRIORIDADES INTELIGENTES: 
+  * Priorize atividades [HIGH] mas garanta que pelo menos 70% das atividades de alta prioridade sejam incluídas
+  * Inclua algumas atividades [MEDIUM] para manter o equilíbrio (pelo menos 50% das médias)
+  * Reserve espaço para pelo menos 30% das atividades [LOW] para manter bem-estar e diversidade
+  * Atividades HIGH devem ter preferência nos melhores horários, mas não exclusividade total
+- BALANCEAMENTO: Crie um dia equilibrado que inclua diferentes níveis de prioridade para evitar sobrecarga
+- Você não precisa incluir todas as tarefas e rotinas listadas. Selecione as mais relevantes considerando prioridade, viabilidade e equilíbrio.
+- Distribua atividades HIGH nos momentos de maior produtividade, MEDIUM em horários estáveis, e LOW em momentos de menor energia ou como pausas ativas.
 - Inclua pausas estratégicas
 - Forneça dicas específicas e mensagem motivacional
 

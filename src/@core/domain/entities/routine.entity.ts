@@ -11,6 +11,7 @@ export interface IRoutineInput {
   title: string;
   description?: string;
   category?: string;
+  priority: "low" | "medium" | "high";
   frequency: TRoutineFrequency;
   startDate: Date;
   endDate?: Date;
@@ -29,6 +30,7 @@ export interface IRoutineOutput {
   title: string;
   description?: string;
   category?: string;
+  priority: "low" | "medium" | "high";
   frequency: TRoutineFrequency;
   startDate: string;
   endDate?: string;
@@ -47,6 +49,7 @@ export class Routine extends Entity {
   title: string;
   description?: string;
   category?: string;
+  priority: "low" | "medium" | "high";
   frequency: TRoutineFrequency;
   startDate: Date;
   endDate?: Date;
@@ -64,6 +67,7 @@ export class Routine extends Entity {
     this.title = input.title;
     this.description = input.description;
     this.category = input.category;
+    this.priority = input.priority;
     this.frequency = input.frequency;
     this.startDate = input.startDate;
     this.endDate = input.endDate;
@@ -83,6 +87,7 @@ export class Routine extends Entity {
       title: this.title,
       description: this.description,
       category: this.category,
+      priority: this.priority,
       frequency: this.frequency,
       startDate: this.startDate.toISOString(),
       endDate: this.endDate?.toISOString(),
@@ -100,6 +105,7 @@ export class Routine extends Entity {
       title: json.title,
       description: json.description,
       category: json.category,
+      priority: json.priority,
       frequency: json.frequency,
       startDate: new Date(json.startDate),
       endDate: json.endDate ? new Date(json.endDate) : undefined,

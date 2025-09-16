@@ -19,6 +19,7 @@ export default function NewRoutinePage() {
         title: "",
         description: "",
         category: "",
+        priority: "medium",
         frequency: "daily",
         startDate: new Date(),
         active: true,
@@ -45,8 +46,8 @@ export default function NewRoutinePage() {
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.title || !formData.frequency || !formData.startDate) {
-            setError("Título, frequência e data de início são obrigatórios");
+        if (!formData.title || !formData.frequency || !formData.startDate || !formData.priority) {
+            setError("Título, frequência, prioridade e data de início são obrigatórios");
             return;
         }
         setLoading(true);
@@ -131,7 +132,7 @@ export default function NewRoutinePage() {
                                         rows={3}
                                     />
                                 </div>
-                                <div className="md:col-span-2">
+                                <div>
                                     <Label htmlFor="category">Categoria</Label>
                                     <Input
                                         id="category"
@@ -139,6 +140,19 @@ export default function NewRoutinePage() {
                                         value={formData.category || ""}
                                         onChange={(e) => handleInputChange("category", e.target.value)}
                                         placeholder="Ex: Trabalho, Pessoal"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="priority">Prioridade *</Label>
+                                    <Select
+                                        id="priority"
+                                        value={formData.priority || "medium"}
+                                        onChange={(e) => handleInputChange("priority", e.target.value)}
+                                        options={[
+                                            { value: "low", label: "Baixa" },
+                                            { value: "medium", label: "Média" },
+                                            { value: "high", label: "Alta" }
+                                        ]}
                                     />
                                 </div>
                                 <div>

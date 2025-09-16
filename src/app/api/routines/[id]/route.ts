@@ -67,6 +67,54 @@ export async function PATCH(
     });
   }
 }
+
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const dataToUpdate = (await req.json()) as Partial<IRoutineInput>;
+  const { id: routineId } = await params;
+  
+  console.log('PUT - Dados recebidos para atualização:', dataToUpdate);
+  console.log('PUT - Prioridade recebida:', dataToUpdate.priority);
+  
+  if (!routineId || Object.keys(dataToUpdate).length === 0) {
+    return new Response("Missing required fields", { status: 400 });
+  }
+  try {
+    if (dataToUpdate.startDate) {
+      dataToUpdate.startDate = new Date(dataToUpdate.startDate);
+    }
+    if (dataToUpdate.endDate) {
+      dataToUpdate.endDate = new Date(dataToUpdate.endDate);
+    }
+    await makeUpdateRoutineUseCase().execute({
+      id: routineId,
+      data: dataToUpdate,
+    });
+    const updatedRoutine = await makeFindByIdRoutineUseCase().execute(
+      routineId
+    );
+    return new Response(JSON.stringify(updatedRoutine), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error updating routine:", error);
+    if (error instanceof Error && error.message === "Routine not found") {
+      return new Response(JSON.stringify({ error: "Routine not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const message =
+      error instanceof Error ? error.message : "Internal Server Error";
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

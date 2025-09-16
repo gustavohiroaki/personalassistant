@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { IRoutineInput, IRoutineOutput } from "@/@core/domain/entities/routine.entity";
 import Card from "@/components/organisms/Card";
@@ -24,12 +24,13 @@ export default function EditRoutinePage() {
         title: "",
         description: "",
         category: "",
+        priority: "medium",
         frequency: "daily",
         startDate: new Date(),
         active: true,
         daysOfWeek: [],
     });
-    const fetchRoutine = async () => {
+    const fetchRoutine = useCallback(async () => {
         try {
             setLoading(true);
             const response = await fetch(`/api/routines/${routineId}`);
@@ -42,6 +43,7 @@ export default function EditRoutinePage() {
                 title: data.title,
                 description: data.description,
                 category: data.category,
+                priority: data.priority || "medium",
                 frequency: data.frequency,
                 startDate: new Date(data.startDate),
                 endDate: data.endDate ? new Date(data.endDate) : undefined,
@@ -58,12 +60,12 @@ export default function EditRoutinePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [routineId]);
     useEffect(() => {
         if (routineId) {
             fetchRoutine();
         }
-    }, [routineId]);
+    }, [routineId, fetchRoutine]);
     const handleInputChange = (
         field: keyof IRoutineInput,
         value: string | boolean | Date | number | number[]
@@ -85,13 +87,14 @@ export default function EditRoutinePage() {
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.title || !formData.frequency || !formData.startDate) {
-            setError("Título, frequência e data de início são obrigatórios");
+        if (!formData.title || !formData.frequency || !formData.startDate || !formData.priority) {
+            setError("Título, frequência, prioridade e data de início são obrigatórios");
             return;
         }
         setSaving(true);
         setError(null);
         try {
+            console.log('Dados sendo enviados para atualização:', formData);
             const response = await fetch(`/api/routines/${routineId}`, {
                 method: "PUT",
                 headers: {
@@ -200,7 +203,7 @@ export default function EditRoutinePage() {
                                         rows={3}
                                     />
                                 </div>
-                                <div className="md:col-span-2">
+                                <div>
                                     <Label htmlFor="category">Categoria</Label>
                                     <Input
                                         id="category"
@@ -208,6 +211,20 @@ export default function EditRoutinePage() {
                                         value={formData.category || ""}
                                         onChange={(e) => handleInputChange("category", e.target.value)}
                                         placeholder="Ex: Trabalho, Pessoal"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="priority">Prioridade *</Label>
+                                    <Select
+                                        id="priority"
+                                        value={formData.priority || "medium"}
+                                        onChange={(e) => handleInputChange("priority", e.target.value)}
+                                        options={[
+                                            { value: "low", label: "Baixa" },
+                                            { value: "medium", label: "Média" },
+                                            { value: "high", label: "Alta" }
+                                        ]}
+                                        required
                                     />
                                 </div>
                                 <div>

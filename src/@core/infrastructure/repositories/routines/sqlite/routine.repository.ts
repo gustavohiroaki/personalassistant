@@ -61,6 +61,7 @@ class RoutineSqliteRepository implements IRoutineRepository {
       title: dbRoutine.title as string,
       description: dbRoutine.description as string | undefined,
       category: dbRoutine.category as string | undefined,
+      priority: (dbRoutine.priority as "low" | "medium" | "high") || "medium",
       frequency: dbRoutine.frequency as
         | "once"
         | "daily"

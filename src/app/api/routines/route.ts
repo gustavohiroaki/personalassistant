@@ -3,13 +3,14 @@ import makeCreateRoutineUseCase from "@/@core/application/usecases/routines/fact
 import makeFindAllRoutinesUseCase from "@/@core/application/usecases/routines/factories/find-all.routine.factory";
 export async function POST(req: Request) {
   const body = (await req.json()) as IRoutineInput;
-  if (!body.title || !body.frequency || !body.startDate) {
+  if (!body.title || !body.frequency || !body.startDate || !body.priority) {
     return new Response("Missing required fields", { status: 400 });
   }
   const routine: IRoutineInput = {
     title: body.title,
     description: body.description,
     category: body.category,
+    priority: body.priority || "medium",
     frequency: body.frequency as
       | "once"
       | "daily"
