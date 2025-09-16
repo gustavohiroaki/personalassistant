@@ -17,11 +17,11 @@ export interface IRoutineInput {
   endDate?: Date;
   active?: boolean;
   daysOfWeek?: number[];
-  dayOfMonth?: number; 
-  daysOfMonth?: number[]; 
-  month?: number; 
-  dayOfYear?: number; 
-  customRule?: string; 
+  dayOfMonth?: number;
+  daysOfMonth?: number[];
+  month?: number;
+  dayOfYear?: number;
+  customRule?: string;
 }
 export interface IRoutineOutput {
   id: string;
